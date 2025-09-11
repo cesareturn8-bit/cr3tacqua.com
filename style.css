@@ -1,0 +1,305 @@
+/* Load PP Telegraf font */
+@font-face {
+    font-family: 'PP Telegraf';
+    src: url('fonts/PPTelegraf-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Global styles */
+body {
+    margin: 0;
+    font-family: 'PP Telegraf', sans-serif;
+    overflow-x: hidden;
+}
+
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 10px;
+    border-bottom: 1px solid #000000;
+}
+
+header h1 {
+    font-size: 0.9rem;
+    margin: 0;
+    position: relative;  /* create stacking context */
+    z-index: 1100;       /* above #binary-layer */
+    cursor: pointer;     /* optional, shows clickable */
+}
+
+nav a {
+    margin-left: 15px;
+    text-decoration: none;
+    color: black;
+}
+
+/* Main layout */
+main {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 0px;
+    padding: 20px;
+}
+
+section {
+    padding: 10px;
+}
+
+h2 {
+    margin-top: 2px;
+    margin-bottom: 5px;
+    font-size: 1.4rem;
+}
+
+.info-title{
+    margin-left: 350px;
+}
+
+.subheading {
+  font-size: 0.95rem;  /* slightly smaller than h2 */
+  font-weight: 600;    /* bolder if supported by font */
+  margin-top: 18px;
+  margin-bottom: 6px;
+}
+
+p {
+    font-size: 0.85rem; /* smaller than default 1rem */
+}
+
+#info {
+    border-right: 1px solid #000000; /* first vertical line */
+    padding-right: 10px;
+}
+
+.toggle-buttons {
+  margin-bottom: 20px;
+}
+
+/* Container that holds the two toggle buttons */
+.buttons {
+  margin-top: 10px;           /* pushes below "Works" title */
+  display: flex;
+  flex-direction: column;     /* stack vertically */
+  gap: 10px;                  /* space between buttons */
+  margin-left: 20px;          /* indent relative to "Works" */
+}
+
+/* Individual buttons */
+.toggle-btn {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  color: #000000;
+  position: relative;
+  padding-left: 20px;         /* space for dot */
+  text-align: left;           /* keeps text aligned left */
+  transition: padding-left 0.2s ease;  /* smooth shift */
+}
+
+/* When active, increase left padding to “push” text */
+.toggle-btn.active {
+  padding-left: 25px;          /* push text right when dot is visible */
+}
+
+/* Active dot */
+.toggle-btn.active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%); 
+  width: 8px;                /* dot size */
+  height: 8px;
+  border-radius: 50%;
+  background-color: #000;
+  margin-left: 10px;
+}
+
+.content-section {
+  display: none;
+  text-align: right;
+}
+
+.content-section.active {
+  display: block;
+}
+
+#visual .image-slider {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  overflow-y: visible;
+  padding: 25px 1px;     /* space around slider */
+  scroll-behavior: smooth;
+  margin-top: 2px;       /* space from Works section */
+  border-top: 0px solid #000000;  /* optional styling */
+  border-bottom: 0px solid #000000;
+  max-width: calc(100%);
+  box-sizing: border-box;
+  margin-left: 200px;
+  width: calc(100% - 200px);
+}
+
+#visual .image-slider img {
+  flex: 0 0 auto;        /* prevent shrinking */
+  height: auto;
+  max-height: 50vh;
+  max-width: 100%;
+  transition: transform 0.28s cubic-bezier(.2,.8,.2,1), box-shadow .28s;
+  cursor: zoom-in;
+  will-change: transform;
+  transform-origin: center center;
+  backface-visibility: hidden;
+}
+
+#enlarged-view {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  background: rgba(255,255,255,0.95);
+  display: none; /* hidden by default */
+  justify-content: center;
+  align-items: center;
+  z-index: 200;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+#enlarged-view img {
+  max-width: 80vw;
+  max-height: 80vh;
+  object-fit: contain;
+}
+
+#enlarged-view.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+#enlarged-view img {
+  cursor: zoom-out;
+  transition: transform 0.35s ease; /* optional zoom-in feel */
+}
+
+#enlarged-view.active img {
+  transform: scale(1);
+}
+
+#enlarged-view img {
+  transform: scale(0.95); /* start slightly smaller */
+  transform-origin: center center;
+}
+
+
+#works {
+  position: relative;
+  overflow: hidden;
+}
+
+
+#visual .slider-container {
+  position: relative; /* establish positioning context */
+  overflow: visible;
+}
+
+#visual .slider-arrow {
+  position: absolute;
+  left: -180px;         /* push into the gutter */
+  top: 50%;             /* vertical center */
+  transform: translate(-50%, -50%);
+  background: none;     /* no box background */
+  border: none;
+  font-size: 2rem;      /* make arrow bigger */
+  cursor: pointer;
+  color: black;         /* arrow color */
+  margin-left: 250px;
+}
+
+#visual .slider-arrow.arrow-left {
+  transform: translate(-30px, -50%);
+}
+
+#visual .slider-arrow.arrow-right {
+  transform: translate(30px, -50%);
+}
+
+#visual .slider-arrow.arrow-left img {
+    height: 35px;
+    width: 35px ;
+}
+
+#visual .slider-arrow.arrow-right img {
+    height: 35px;
+    width: 35px ;
+}
+
+.arrow-left img {
+    transform: scaleX(-1);
+}
+
+.image-slider::-webkit-scrollbar {
+  display: none; 
+}
+
+#binary-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgb(255, 255, 255);
+  color: rgb(0, 255, 0);
+  font-family: monospace;
+  font-size: 10px;
+  line-height: 1.2;
+  padding: 10px;
+  white-space: pre;      /* wrap long lines */
+  overflow: hidden;             /* scrollable if needed */
+  z-index: 1000;                 /* below your content */
+  clip-path: circle(5px at 0 0); /* start invisible */
+  pointer-events: none;       /* allow clicks through */
+}
+
+#binary-layer.fullscreen {
+  clip-path: none;         /* reveal everything */
+  z-index: 1000;           /* above all site content */
+  pointer-events: auto;    /* optional: block clicks while active */
+  opacity: 1;
+}
+
+.red {
+  color: red;
+  font-weight: bold;
+}
+
+/* Base glow: always on */
+.red-pixel {
+  color: #ff0000;
+  text-shadow:
+    0 0 5px #ff0000,
+    0 0 10px #ff0000,
+    0 0 20px #ff0000;
+}
+
+/* Fullscreen = ADD intensity, not replace */
+.fullscreen .red-pixel {
+  text-shadow:
+    0 0 5px hsl(0, 100%, 50%),
+    0 0 15px #ff0000,
+    0 0 30px #ff0000,
+    0 0 50px #ff0000,
+    0 0 80px rgb(255, 0, 0);
+}
+
+
+
+.title {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+
