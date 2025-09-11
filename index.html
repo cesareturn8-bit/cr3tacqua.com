@@ -1,415 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>cr3tacqua</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Under Maintenance</title>
+<style>
+  body {
+    margin: 0;
+    background: rgb(255, 255, 255);
+    overflow: hidden;
+  }
+  canvas {
+    display: block;
+  }
+</style>
 </head>
 <body>
+<canvas id="matrix"></canvas>
 
-  <div id="binary-layer"></div>
+<script>
+const canvas = document.getElementById('matrix');
+const ctx = canvas.getContext('2d');
 
-  <header>
-    <h1 id="site-title">cr3tacqua.com</h1>
-  </header>
+let width = canvas.width = window.innerWidth;
+let height = canvas.height = window.innerHeight;
 
-  <main>
-    <!-- Left column -->
-    <section id="info">
-      <h2 class="info-title">Information</h2>
-      <p>I am a dedicated graphic designer with a strong commitment to my work and passion
-      for thorough research.
-      I have particular focus on graphic design and audiovisual arts, publishing, curatorship,
-      typography, together with a strong affinity with sound design.
-      Currently studying a MA at LUCA School of Arts, Brussels.</p>
-      <p class="subheading">Experience</p>
-     <p>° Scenographer at Here Be Dragons 25 MA Exhibition, Brussels <br>
-      ° Graphic & Motion Designer at Atipico, Bassano del Grappa <br>
-      ° Graphic, Visual & Sound Designer at Common Grounds Exhibition, Brussels <br>
-      ° Product Assistant at Acne Studios, Stockholm <br>
-      &nbsp;&nbsp;&nbsp;&nbsp; - Live Visual Design for FW24 Office After-Show Party <br>
-      ° Graphic & Visual Designer, Videomaker at [8r], Bassano del Grappa (Freelance)
-      </p>
+const fontSize = 5;
+let cols = Math.ceil(width / fontSize);
+let rows = Math.ceil(height / fontSize);
 
-     <p class="subheading">Proficiency</p>
-     <p>Adobe <br>
-      Touchdesigner <br>
-      Resolume <br>
-      Ableton Live
-     </p>
-
-      <p class="subheading">Education</p>
-      <p>2024/2025 <br>
-        MA Visual Arts - Graphic Design, LUCA School of Arts, Bruxelles <br>
-        <br>
-        2020/2023 <br>
-        BA Fashion Marketing & Communication, European Institute of Design, Milan
-        </p>
-
-      <p class="subheading">Exposure</p>
-      <p>...</p>
-
-      <p class="subheading">Contact</p>
-      <p>cesaremanueleg@gmail.com <br>
-      or send a text message at 0039 3934476886</p>
-    </section>
-
-    <!-- Right column -->
-    <section id="works">
-      <h2 class="works-title">Works</h2>
-      
-      <div class="buttons">
-        <button class="toggle-btn active" data-target="visual">Visual</button>
-        <button class="toggle-btn" data-target="sound">Sound</button>
-      </div>
-
-      <div id="sound" class="content-section">
-          <p>[Sound Project 1]</p>
-          <p>Description of sound project...</p>
-      </div>
-
-      <div id="visual" class="content-section">
-        <p class="title">CD Type Font Part 2</p>
-        <p>Description of visual project...</p>
-        <div class="slider-container">
-          <div class="image-slider">
-            <img src="images/EAD.svg" alt="CD3">
-            <img src="images/CDFont.jpg" alt="CD1">
-            <img src="images/CDFont2.jpg" alt="CD2">
-          </div>
-          <button class="slider-arrow arrow-left" aria-label="Previous image">
-            <img src="images/Arrow Key Right NO BG.svg" alt="arrow-left">
-          </button>
-          <button class="slider-arrow arrow-right" aria-label="Next image">
-            <img src="images/Arrow Key Right NO BG.svg" alt="arrow-right">
-          </button>
-        </div>
-        <br>
-        <br>
-        <br>
-        <br>
-
-        <p class="title">Venice Biennale Arte Concept</p>
-        <p>Description of visual project...</p>
-
-        <div class="slider-container">
-        <div class="image-slider">
-          <img src="images/PROCESS1.jpg" alt="PROCESS1" class="PROCESS">
-          <img src="images/PROCESS2.jpg" alt="PROCESS2" class="PROCESS">
-          <img src="images/PROCESS3.jpg" alt="PROCESS3" class="PROCESS">
-          <img src="images/PROCESS5.jpg" alt="PROCESS5" class="PROCESS">
-          <img src="images/PROCESS6.jpg" alt="PROCESS6" class="PROCESS">
-        </div>
-         <button class="slider-arrow arrow-left" aria-label="Previous image">
-            <img src="images/Arrow Key Right NO BG.svg" alt="arrow-left">
-          </button>
-          <button class="slider-arrow arrow-right" aria-label="Next image">
-            <img src="images/Arrow Key Right NO BG.svg" alt="arrow-right">
-          </button>
-        </div>
-        <br>
-        <br>
-        <br>
-        <br>
-
-        <p class="title">A227.</p>
-        <p>Description of visual project...</p>
-
-        <div class="slider-container">
-        <div class="image-slider">
-          <img src="images/MG24.png" alt="Cover">
-        </div>
-         <button class="slider-arrow arrow-left" aria-label="Previous image">
-            <img src="images/Arrow Key Right NO BG.svg" alt="arrow-left">
-          </button>
-          <button class="slider-arrow arrow-right" aria-label="Next image">
-            <img src="images/Arrow Key Right NO BG.svg" alt="arrow-right">
-          </button>
-        </div>
-
-        <div id="enlarged-view">
-          <img src="" alt="enlarged work">
-        </div>
-
-
-
-
-    </section>
-  </main>
-
-  <script>
-    document.querySelectorAll('.toggle-btn').forEach(button => {
-      button.addEventListener('click', () => {
-        document.querySelectorAll('.toggle-btn').forEach(btn => btn.classList.remove('active'));
-        button.classList.add('active');
-
-        document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
-        document.getElementById(button.dataset.target).classList.add('active');
-      });
-    });
-  </script>
-
-  <script>
-    const sliders = document.querySelectorAll('.slider-container');
-
-    sliders.forEach(container => {
-    const slider = container.querySelector('.image-slider');
-    const leftArrow = container.querySelector('.arrow-left');
-    const rightArrow = container.querySelector('.arrow-right');
-
-    if (!slider || !leftArrow || !rightArrow) return;
-
-    const updateArrowVisibility = () => {
-    leftArrow.classList.toggle('hidden', slider.scrollLeft <= 0);
-    rightArrow.classList.toggle('hidden', slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 1);
-    };
-
-    rightArrow.addEventListener('click', () => {
-    slider.scrollBy({ left: slider.clientWidth * 0.75, behavior: 'smooth' });
-    });
-
-    leftArrow.addEventListener('click', () => {
-    slider.scrollBy({ left: -slider.clientWidth * 0.75, behavior: 'smooth' });
-    });
-
-    slider.addEventListener('scroll', updateArrowVisibility);
-    window.addEventListener('resize', updateArrowVisibility);
-
-    updateArrowVisibility(); // initialize visibility
-    });
-  </script>
-
-  <script>
-  document.addEventListener("DOMContentLoaded", () => {
-  const binaryLayer = document.getElementById('binary-layer');
-  const siteTitle = document.getElementById('site-title');
-
-  const fontSize = 12;
-  const cols = Math.ceil(window.innerWidth / fontSize * 2);
-  const rows = Math.ceil(window.innerHeight / fontSize * 2);
-
-  const mask = [
-    [1,0,0,0,1,0, 0,1,1,0,0, 1,0,0,0, 0,1,1,0, 0,1,1,0,0, 1,0,1,0,1,0,0, 0,1,1,0,0],
-    [1,0,0,0,1,0, 1,0,0,1,0, 1,0,0,0, 1,0,0,0, 1,0,0,1,0, 1,1,0,1,0,1,0, 1,0,0,1,0],
-    [1,0,1,0,1,0, 1,1,1,1,0, 1,0,0,0, 1,0,0,0, 1,0,0,1,0, 1,0,0,1,0,1,0, 1,1,1,1,0],
-    [1,1,0,1,1,0, 1,0,0,0,0, 1,0,0,0, 1,0,0,0, 1,0,0,1,0, 1,0,0,0,0,1,0, 1,0,0,0,0],
-    [1,0,0,0,1,0, 0,1,1,1,0, 0,1,1,0, 0,1,1,0, 0,1,1,0,0, 1,0,0,0,0,1,0, 0,1,1,1,0]   
-  ];
-
-  const startRow = Math.floor((rows - mask.length) / 4);
-  const startCol = Math.floor((cols - mask[0].length) / 4);
-
-  // Columns with random speeds
-  let columns = [];
+// Initialize a grid filled with random 0/1
+let grid = [];
+for (let r = 0; r < rows; r++) {
+  grid[r] = [];
   for (let c = 0; c < cols; c++) {
-    let col = [];
-    for (let r = 0; r < rows; r++) col.push(Math.random() > 0.5 ? '0' : '1');
-    columns.push({
-      values: col,
-      speed: 0.001 + Math.random() * 0.5,
-      offset: Math.random() * rows
-    });
+    grid[r][c] = Math.random() > 0.5 ? '1' : '0';
   }
+}
 
-  let isFullscreen = false;
+// Control speed
+let speed = 0.25; // smaller = slower
+let offset = 0;
 
-  function drawBinary() {
-    let output = '';
-
-    for (let r = 0; r < rows; r++) {
-      for (let c = 0; c < cols; c++) {
-        let char = columns[c].values[Math.floor((r + columns[c].offset) % rows)];
-
-        let redPixel = (
-          r >= startRow && r < startRow + mask.length &&
-          c >= startCol && c < startCol + mask[0].length &&
-          mask[r - startRow][c - startCol] === 1
-        );
-
-        if (redPixel) output += `<span class="red-pixel">${char}</span>`;
-        else output += char;
-      }
-      output += '\n';
+function drawBinary() {
+  offset += speed;
+  if (offset >= 1) {
+    // Shift the grid down by 1 row
+    for (let r = rows - 1; r > 0; r--) {
+      grid[r] = [...grid[r - 1]];
     }
-
-    binaryLayer.innerHTML = output;
-
-    // Animate rain
-    columns.forEach(col => {
-      col.offset -= col.speed;
-      if (col.offset < 0) col.offset += rows;
-    });
-
-    requestAnimationFrame(drawBinary);
+    // Generate new top row
+    grid[0] = [];
+    for (let c = 0; c < cols; c++) {
+      grid[0][c] = Math.random() > 0.5 ? '1' : '0';
+    }
+    offset = 0;
   }
 
+  // Clear canvas completely (no trail)
+  ctx.fillStyle = 'white';
+  ctx.fillRect(0, 0, width, height);
+
+  // Draw binary
+  ctx.fillStyle = '#00ff00';
+  ctx.font = `${fontSize}px monospace`;
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      ctx.fillText(grid[r][c], c * fontSize, (r + offset) * fontSize);
+    }
+  }
+}
+
+function maskText() {
+  ctx.globalCompositeOperation = 'destination-in';
+  ctx.fillStyle = 'white';
+  ctx.font = `${width / 25}px monospace`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('Under Maintenance', width / 2, height / 2);
+  ctx.globalCompositeOperation = 'source-over';
+}
+
+function loop() {
   drawBinary();
+  maskText();
+  requestAnimationFrame(loop);
+}
 
-  document.addEventListener('mousemove', e => {
-    if (!isFullscreen) binaryLayer.style.clipPath = `circle(20px at ${e.clientX}px ${e.clientY}px)`;
-  });
+loop();
 
-  siteTitle.addEventListener('click', () => {
-    if (!isFullscreen) {
-      isFullscreen = true;
-      binaryLayer.classList.add('fullscreen');
-      binaryLayer.style.clipPath = "none";
-
-      let fadeMatrix = [];
-      for (let r = 0; r < rows; r++) {
-        fadeMatrix[r] = [];
-        for (let c = 0; c < cols; c++) fadeMatrix[r][c] = Math.floor(Math.random() * 60);
-      }
-
-      let fadeFrame = 0;
-      function fadeInBinary() {
-        let output = '';
-        let visibleCount = 0;
-        for (let r = 0; r < rows; r++) {
-          for (let c = 0; c < cols; c++) {
-            if (fadeFrame >= fadeMatrix[r][c]) {
-              let index = Math.floor((r + columns[c].offset) % rows);
-              let char = columns[c].values[index];
-
-              let redPixel = (
-                r >= startRow && r < startRow + mask.length &&
-                c >= startCol && c < startCol + mask[0].length &&
-                mask[r - startRow][c - startCol] === 1
-              );
-
-              if (redPixel) output += `<span class="red-pixel">${char}</span>`;
-              else output += char;
-
-              visibleCount++;
-            } else {
-              output += ' ';
-            }
-          }
-          output += '\n';
-        }
-        binaryLayer.innerHTML = output;
-        let alpha = visibleCount / (rows * cols);
-        binaryLayer.style.backgroundColor = `rgba(255,255,255,${alpha})`;
-
-        fadeFrame++;
-        if (fadeFrame <= 60) requestAnimationFrame(fadeInBinary);
-      }
-
-      fadeInBinary();
-
-    } else {
-      isFullscreen = false;
-
-      let fadeMatrix = [];
-      for (let r = 0; r < rows; r++) {
-        fadeMatrix[r] = [];
-        for (let c = 0; c < cols; c++) fadeMatrix[r][c] = Math.floor(Math.random() * 60);
-      }
-
-      let fadeFrame = 0;
-      function fadeOutBinary() {
-        let output = '';
-        let vanishedCount = 0;
-        for (let r = 0; r < rows; r++) {
-          for (let c = 0; c < cols; c++) {
-            if (fadeFrame >= fadeMatrix[r][c]) {
-              output += ' ';
-              vanishedCount++;
-            } else {
-              let index = Math.floor((r + columns[c].offset) % rows);
-              let char = columns[c].values[index];
-
-              let redPixel = (
-                r >= startRow && r < startRow + mask.length &&
-                c >= startCol && c < startCol + mask[0].length &&
-                mask[r - startRow][c - startCol] === 1
-              );
-
-              if (redPixel) output += `<span class="red-pixel">${char}</span>`;
-              else output += char;
-            }
-          }
-          output += '\n';
-        }
-        binaryLayer.innerHTML = output;
-        let alpha = 1 - vanishedCount / (rows * cols);
-        binaryLayer.style.backgroundColor = `rgba(255,255,255,${alpha})`;
-
-        fadeFrame++;
-        if (fadeFrame <= 60) requestAnimationFrame(fadeOutBinary);
-        else {
-          binaryLayer.style.clipPath = "circle(20px at 50% 50%)";
-          binaryLayer.style.backgroundColor = "transparent";
-        }
-        
-      }
-
-      fadeOutBinary();
-      binaryLayer.classList.remove('fullscreen');
+window.addEventListener('resize', () => {
+  width = canvas.width = window.innerWidth;
+  height = canvas.height = window.innerHeight;
+  cols = Math.ceil(width / fontSize);
+  rows = Math.ceil(height / fontSize);
+  grid = [];
+  for (let r = 0; r < rows; r++) {
+    grid[r] = [];
+    for (let c = 0; c < cols; c++) {
+      grid[r][c] = Math.random() > 0.5 ? '1' : '0';
     }
-  });
-
-  window.addEventListener('resize', () => location.reload());
-});
-</script>
-
-
-
-
-
-  <script>
-document.querySelectorAll('#visual .image-slider img').forEach(img => {
-  img.addEventListener('click', () => {
-    const enlargedView = document.getElementById('enlarged-view');
-    const enlargedImg = enlargedView.querySelector('img');
-
-    // set enlarged image source
-    enlargedImg.src = img.src;
-    enlargedImg.alt = img.alt;
-
-    // get bounding rect of clicked image
-    const rect = img.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-
-    // position enlarged view centered on image
-    enlargedView.style.position = 'fixed';
-    enlargedView.style.left = `${centerX}px`;
-    enlargedView.style.top = `${centerY}px`;
-    enlargedView.style.display = 'flex';
-
-    // hide original image while enlarged is open
-    img.style.visibility = 'hidden';
-    enlargedView.dataset.originId = img.dataset.id || Date.now();
-    img.dataset.id = enlargedView.dataset.originId;
-  });
-});
-
-// close on click
-document.getElementById('enlarged-view').addEventListener('click', () => {
-  const enlargedView = document.getElementById('enlarged-view');
-  const enlargedImg = enlargedView.querySelector('img');
-
-  // restore original image visibility
-  const originId = enlargedView.dataset.originId;
-  if (originId) {
-    const originImg = document.querySelector(`#visual .image-slider img[data-id="${originId}"]`);
-    if (originImg) originImg.style.visibility = 'visible';
   }
-
-  // hide enlarged view
-  enlargedView.style.display = 'none';
-  enlargedImg.src = "";
-  enlargedImg.alt = "";
-  delete enlargedView.dataset.originId;
 });
 </script>
-
-
-
-
-
-
 </body>
 </html>
