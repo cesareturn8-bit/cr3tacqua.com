@@ -34,7 +34,7 @@ let grid = [];
 for (let r = 0; r < rows; r++) {
   grid[r] = [];
   for (let c = 0; c < cols; c++) {
-    grid[r][c] = Math.random() > 0.5 ? '1' : '0';
+    grid[r][c] = Math.random() > 0.5 ? '11' : '00';
   }
 }
 
@@ -52,7 +52,7 @@ function drawBinary() {
     // Generate new top row
     grid[0] = [];
     for (let c = 0; c < cols; c++) {
-      grid[0][c] = Math.random() > 0.5 ? '1' : '0';
+      grid[0][c] = Math.random() > 0.5 ? '11' : '00';
     }
     offset = 0;
   }
@@ -73,11 +73,14 @@ function drawBinary() {
 
 function maskText() {
   ctx.globalCompositeOperation = 'destination-in';
-  ctx.fillStyle = 'white';
-  ctx.font = `${width / 25}px monospace`;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
+  ctx.font = `${width / 25}px monospace`;
+  ctx.fillStyle = 'white';
   ctx.fillText('Under Maintenance', width / 2, height / 2);
+  ctx.strokeStyle = 'black';
+  ctx.lineWidth = 200;
+  ctx.strokeText('UNDER MAINTENANCE', width / 2, height / 2);
   ctx.globalCompositeOperation = 'source-over';
 }
 
@@ -92,13 +95,14 @@ loop();
 window.addEventListener('resize', () => {
   width = canvas.width = window.innerWidth;
   height = canvas.height = window.innerHeight;
+  let fontSize = Math.max(1, Math.floor(width / 150));
   cols = Math.ceil(width / fontSize);
   rows = Math.ceil(height / fontSize);
   grid = [];
   for (let r = 0; r < rows; r++) {
     grid[r] = [];
     for (let c = 0; c < cols; c++) {
-      grid[r][c] = Math.random() > 0.5 ? '1' : '0';
+      grid[r][c] = Math.random() > 0.5 ? '11' : '00';
     }
   }
 });
