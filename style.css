@@ -173,27 +173,20 @@ p {
   max-width: 80vw;
   max-height: 80vh;
   object-fit: contain;
+  display: block;
+  transform: scale(0.95); /* start slightly smaller */
+  transform-origin: center center;
+  cursor: zoom-out;
+  transition: transform 0.5s ease;
+  width: auto;
+  height: auto;
 }
 
 #enlarged-view.active {
   opacity: 1;
   visibility: visible;
-}
-
-#enlarged-view img {
-  cursor: zoom-out;
-  transition: transform 0.35s ease; /* optional zoom-in feel */
-}
-
-#enlarged-view.active img {
   transform: scale(1);
 }
-
-#enlarged-view img {
-  transform: scale(0.95); /* start slightly smaller */
-  transform-origin: center center;
-}
-
 
 #works {
   position: relative;

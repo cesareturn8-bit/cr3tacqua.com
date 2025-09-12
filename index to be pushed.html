@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Under Maintenance</title>
+<style>
+  body {
+    margin: 0;
+    background: rgb(255, 255, 255);
+    overflow: hidden;
+  }
+  canvas {
+    display: block;
+  }
+</style>
+</head>
+<body>
+<canvas id="matrix"></canvas>
+
+<script>
+const canvas = document.getElementById('matrix');
+const ctx = canvas.getContext('2d');
+
+let width = canvas.width = window.innerWidth;
+let height = canvas.height = window.innerHeight;
+
+let fontSize = Math.max(1, Math.floor(width / 150));
+let cols = Math.ceil(width / fontSize);
+let rows = Math.ceil(height / fontSize);
+
+// Initialize a grid filled with random 0/1
+let grid = [];
+for (let r = 0; r < rows; r++) {
+  grid[r] = [];
+  for (let c = 0; c < cols; c++) {
+    grid[r][c] = Math.random() > 0.5 ? '11' : '00';
+  }
+}
+
+// Control speed
+let speed = 0.25; // smaller = slower
+let offset = 0;
+
+function drawBinary() {
+  offset += speed;
+  if (offset >= 1) {
+    // Shift the grid down by 1 row
+    for (let r = rows - 1; r > 0; r--) {
+      grid[r] = [...grid[r - 1]];
+    }
+    // Generate new top row
+    grid[0] = [];
+    for (let c = 0; c < cols; c++) {
+      grid[0][c] = Math.random() > 0.5 ? '11' : '00';
+    }
+    offset = 0;
+  }
+
+  // Clear canvas completely (no trail)
+  ctx.fillStyle = 'white';
+  ctx.fillRect(0, 0, width, height);
+
+  // Draw binary
+  ctx.fillStyle = '#00ff00';
+  ctx.font = `${fontSize}px monospace`;
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      ctx.fillText(grid[r][c], c * fontSize, (r + offset) * fontSize);
+    }
+  }
+}
+
+function maskText() {
+  ctx.globalCompositeOperation = 'destination-in';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.font = `${width / 25}px monospace`;
+  ctx.fillStyle = 'white';
+  ctx.fillText('Under Maintenance', width / 2, height / 2);
+  ctx.strokeStyle = 'black';
+  ctx.lineWidth = 200;
+  ctx.strokeText('UNDER MAINTENANCE', width / 2, height / 2);
+  ctx.globalCompositeOperation = 'source-over';
+}
+
+function loop() {
+  drawBinary();
+  maskText();
+  requestAnimationFrame(loop);
+}
+
+loop();
+
+window.addEventListener('resize', () => {
+  width = canvas.width = window.innerWidth;
+  height = canvas.height = window.innerHeight;
+  let fontSize = Math.max(1, Math.floor(width / 150));
+  cols = Math.ceil(width / fontSize);
+  rows = Math.ceil(height / fontSize);
+  grid = [];
+  for (let r = 0; r < rows; r++) {
+    grid[r] = [];
+    for (let c = 0; c < cols; c++) {
+      grid[r][c] = Math.random() > 0.5 ? '11' : '00';
+    }
+  }
+});
+</script>
+</body>
+</html>
