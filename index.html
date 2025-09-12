@@ -25,7 +25,7 @@ const ctx = canvas.getContext('2d');
 let width = canvas.width = window.innerWidth;
 let height = canvas.height = window.innerHeight;
 
-const fontSize = 5;
+let fontSize = Math.max(1, Math.floor(width / 150));
 let cols = Math.ceil(width / fontSize);
 let rows = Math.ceil(height / fontSize);
 
