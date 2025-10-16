@@ -160,7 +160,7 @@ p {
 #enlarged-view {
   position: absolute;
   transform: translate(-50%, -50%);
-  background: rgba(255,255,255,0.95);
+  background: transparent;
   display: none; /* hidden by default */
   justify-content: center;
   align-items: center;
@@ -298,3 +298,4 @@ p {
     flex: 1 1 100%; /* stack vertically on mobile */
     padding: 0.5rem;
   }
+}
