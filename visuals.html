@@ -5,31 +5,166 @@
   <title>Visuals</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+    @font-face {
+    font-family: 'PP Telegraf';
+    src: url('fonts/PPTelegraf-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    }
+
     body {
       display: flex;
+      flex-direction: column;
       height: 100vh;
       margin: 0;
-      align-items: center;
-      justify-content: center;
       font-family: 'PP Telegraf', sans-serif;
       background: #fafafa;
     }
+
+    header {
+     width: 100%;
+     display: flex;
+     justify-content: left;
+     padding: 10px 10px;
+     font-family: 'PP Telegraf', sans-serif;
+    }
+
+    header h1 {
+        font-size: 0.9rem; /* Change this value as needed */
+        margin: 0;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    #bubble-message {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+    }
+
     .message {
       font-size: 1.3rem;
       color: #222;
       text-align: center;
       padding: 2rem;
       border-radius: 8px;
+      display: inline-block;
+      line-height: 1.2;
+      user-select: none;
+      white-space: pre-wrap;
+      z-index: 1000;
     }
     .message a {
-      color: #939393;
+      color: #aeaeae;
       text-decoration: none;
+      z-index: 1000;
+    }
+    .bubble-char {
+      display: inline-block;
+      transition: transform 0.15s cubic-bezier(.25,.8,.25,1);
+      will-change: transform;
+      z-index: 1000;
     }
   </style>
 </head>
 <body>
-  <div class="message">
-    Please contact <a href="mailto:cesareturn8@gmail.com">cesareturn8@gmail.com</a> for visual works portfolio
-    </div>
+
+    <header>
+    <h1 id="site-title">cr3tacqua.com</h1>
+    </header>
+
+    <div id="binary-layer"></div>
+
+    <script>
+        document.getElementById('site-title').addEventListener('click', function() {
+  window.location.href = 'index.html';
+});
+    </script>
+
+    </script>  <div class="message" id="bubble-message"></div>
+  <script>
+    // The message, with the email as a link
+    const messageHTML = `Please contact <a href="mailto:cesareturn8@gmail.com">cesareturn8@gmail.com</a> for visual works portfolio.`;
+
+    // Utility to wrap each character in a span
+    function wrapChars(html) {
+      // Split HTML into text and tags
+      const parts = html.split(/(<a.*?<\/a>)/g);
+      return parts.map(part => {
+        if (part.startsWith('<a')) {
+          // For the <a> tag, wrap each char inside the tag
+          return part.replace(/>(.*?)</, (m, text) =>
+            '>' + Array.from(text).map(c =>
+              `<span class="bubble-char">${c}</span>`
+            ).join('') + '<'
+          );
+        } else {
+          // For plain text, wrap each char
+          return Array.from(part).map(c =>
+            `<span class="bubble-char">${c}</span>`
+          ).join('');
+        }
+      }).join('');
+    }
+
+    const msgDiv = document.getElementById('bubble-message');
+    msgDiv.innerHTML = wrapChars(messageHTML);
+
+    const chars = Array.from(msgDiv.querySelectorAll('.bubble-char'));
+
+    // Get the center coordinates for each char
+    function getCharCenters() {
+      return chars.map(span => {
+        const rect = span.getBoundingClientRect();
+        return {
+          x: (rect.left + rect.right) / 2,
+          y: (rect.top + rect.bottom) / 2
+        };
+      });
+    }
+
+    function updateBubble(mouseX, mouseY) {
+      const centers = getCharCenters();
+      const maxDist = 120; // px, controls bubble size
+      chars.forEach((span, i) => {
+        const dx = centers[i].x - mouseX;
+        const dy = centers[i].y - mouseY;
+        const distSq = dx * dx + dy * dy;
+        // Bubble effect: closer = more stretch, farther = less
+        let scale = 1 + 0.8 * Math.exp(-distSq / (2 * maxDist * maxDist));
+        span.style.transform = `scale(${scale},${scale})`;
+      });
+    }
+
+    // Initial bubble at center
+    setTimeout(() => {
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+      updateBubble(centerX, centerY);
+    }, 100);
+
+    window.addEventListener('mousemove', e => {
+      updateBubble(e.clientX, e.clientY);
+    });
+
+    window.addEventListener('mouseleave', () => {
+      // Reset all to normal
+      chars.forEach(span => {
+        span.style.transition = 'transform 0.7s cubic-bezier(.25,.8,.25,1)';
+        span.style.transform = 'scale(1,1)';
+      });
+      setTimeout(() => {
+        chars.forEach(span => span.style.transition = '');
+      }, 700);
+    });
+
+    window.addEventListener('resize', () => {
+      // Recalculate on resize
+      updateBubble(window.innerWidth / 2, window.innerHeight / 2);
+    });
+  </script>
+
 </body>
 </html>

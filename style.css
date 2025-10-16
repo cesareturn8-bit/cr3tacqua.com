@@ -299,3 +299,25 @@ p {
     padding: 0.5rem;
   }
 }
+
+/* Stretching message style */
+.stretch-message {
+  font-size: 1.3rem;
+  color: #222;
+  text-align: center;
+  padding: 2rem;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  transition: transform 0.2s cubic-bezier(.25,.8,.25,1);
+  will-change: transform;
+  font-family: 'PP Telegraf', sans-serif;
+  margin: 0 auto;
+  display: inline-block;
+}
+
+.stretch-message a {
+  color: #939393;
+  text-decoration: none;
+}
+

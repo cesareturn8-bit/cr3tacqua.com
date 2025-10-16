@@ -29,32 +29,33 @@ let fontSize = Math.max(1, Math.floor(width / 150));
 let cols = Math.ceil(width / fontSize);
 let rows = Math.ceil(height / fontSize);
 
-// Initialize a grid filled with random 0/1
-let grid = [];
-for (let r = 0; r < rows; r++) {
-  grid[r] = [];
-  for (let c = 0; c < cols; c++) {
-    grid[r][c] = Math.random() > 0.5 ? '11' : '00';
+// Initialize columns with random speeds and offsets
+let columns = [];
+for (let c = 0; c < cols; c++) {
+  let col = [];
+  for (let r = 0; r < rows; r++) {
+    col[r] = Math.random() > 0.5 ? '11' : '00';
   }
+  columns[c] = {
+    values: col,
+    offset: Math.random() * rows,
+    speed: 0.01 + Math.random() * 0.5 // random speed per column
+  };
 }
 
-// Control speed
-let speed = 0.25; // smaller = slower
-let offset = 0;
-
 function drawBinary() {
-  offset += speed;
-  if (offset >= 1) {
-    // Shift the grid down by 1 row
-    for (let r = rows - 1; r > 0; r--) {
-      grid[r] = [...grid[r - 1]];
+  // Update each column's offset
+  for (let c = 0; c < cols; c++) {
+    columns[c].offset += columns[c].speed;
+    if (columns[c].offset >= rows) {
+      columns[c].offset -= rows;
+      // Generate new top value for this column
+      columns[c].values[0] = Math.random() > 0.5 ? '11' : '00';
+      // Shift column values down
+      for (let r = rows - 1; r > 0; r--) {
+        columns[c].values[r] = columns[c].values[r - 1];
+      }
     }
-    // Generate new top row
-    grid[0] = [];
-    for (let c = 0; c < cols; c++) {
-      grid[0][c] = Math.random() > 0.5 ? '11' : '00';
-    }
-    offset = 0;
   }
 
   // Clear canvas completely (no trail)
@@ -64,9 +65,10 @@ function drawBinary() {
   // Draw binary
   ctx.fillStyle = '#00ff00';
   ctx.font = `${fontSize}px monospace`;
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
-      ctx.fillText(grid[r][c], c * fontSize, (r + offset) * fontSize);
+  for (let c = 0; c < cols; c++) {
+    for (let r = 0; r < rows; r++) {
+      let y = ((r + columns[c].offset) % rows) * fontSize;
+      ctx.fillText(columns[c].values[r], c * fontSize, y);
     }
   }
 }
@@ -95,15 +97,20 @@ loop();
 window.addEventListener('resize', () => {
   width = canvas.width = window.innerWidth;
   height = canvas.height = window.innerHeight;
-  let fontSize = Math.max(1, Math.floor(width / 150));
+  fontSize = Math.max(1, Math.floor(width / 150));
   cols = Math.ceil(width / fontSize);
   rows = Math.ceil(height / fontSize);
-  grid = [];
-  for (let r = 0; r < rows; r++) {
-    grid[r] = [];
-    for (let c = 0; c < cols; c++) {
-      grid[r][c] = Math.random() > 0.5 ? '11' : '00';
+  columns = [];
+  for (let c = 0; c < cols; c++) {
+    let col = [];
+    for (let r = 0; r < rows; r++) {
+      col[r] = Math.random() > 0.5 ? '11' : '00';
     }
+    columns[c] = {
+      values: col,
+      offset: Math.random() * rows,
+      speed: 0.1 + Math.random() * 0.4
+    };
   }
 });
 </script>
