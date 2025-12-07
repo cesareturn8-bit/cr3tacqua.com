@@ -82,7 +82,6 @@ nav a {
   }
 
   #main-content-wrapper {
-    border-left: 1px solid #000000; /* The vertical dividing line */
     padding-left: 30px; /* Space between the line and the content */
   }
 }
@@ -98,6 +97,7 @@ nav a {
     justify-content: space-around;
     margin-bottom: 20px;
     border: none;
+    border-right: none;
   }
 }
 
@@ -169,7 +169,7 @@ p {
 
 #info {
     border-right: 1px solid #000000; /* first vertical line */
-    padding-right: 30px;
+    padding-right: 2%;
     display: grid;
     grid-template-rows: auto 1fr; /* First row for nav, second for content */
     align-content: start;  
@@ -177,7 +177,7 @@ p {
 
 @media (min-width: 801px) {
   #info {
-    margin-right: 15px; /* Push left, making the border visible */
+    margin-right: 2%; /* Push left, making the border visible */
   }
 }
 
@@ -191,7 +191,7 @@ p {
   display: flex;
   flex-direction: column;     /* stack vertically */
   gap: 10px;                  /* space between buttons */
-  margin-left: 20px;          /* indent relative to "Works" */
+  margin-left: 2%;          /* indent relative to "Works" */
 }
 
 /* Individual buttons */
@@ -290,11 +290,11 @@ p {
   overflow-x: hidden;
 }
 
-@media (max-width: 800px) {
   #works {
     border-left: #000000 1px solid; /* second vertical line */
+    padding-left: 2%;
   }
-}
+
 
 #contact {
   border-bottom: #000000 1px solid; /* horizontal line above contact */
