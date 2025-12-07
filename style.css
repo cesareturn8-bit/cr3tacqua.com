@@ -2,7 +2,19 @@
 @font-face {
     font-family: 'PP Telegraf';
     src: url('fonts/PPTelegraf-Regular.woff') format('woff');
-    font-weight: normal;
+    font-weight: 400;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'PP Telegraf';
+    src: url('fonts/PPTelegraf-SemiBold.woff') format('woff');
+    font-weight: 600;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'PP Telegraf';
+    src: url('fonts/PPTelegraf-Bold.woff') format('woff');
+    font-weight: 800;
     font-style: normal;
 }
 
@@ -15,11 +27,25 @@ body {
 
 /* Header */
 header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 10px;
-    border-bottom: 1px solid #000000;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  width: 100vw;
+  z-index: 100;
+  background: #fff;
+  border-bottom: 1px solid #111;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 10px 10px;
+  box-sizing: border-box;
+}
+
+#site-title,
+#volume-slider-container {
+  pointer-events: auto; /* allow interaction */
 }
 
 header h1 {
@@ -28,6 +54,7 @@ header h1 {
     position: relative;  /* create stacking context */
     z-index: 1100;       /* above #binary-layer */
     cursor: pointer;     /* optional, shows clickable */
+    text-align: center;
 }
 
 nav a {
@@ -36,12 +63,48 @@ nav a {
     color: black;
 }
 
-/* Main layout */
-main {
+
+@media (min-width: 801px) {
+  main {
     display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 0px;
-    padding: 20px;
+    /* First column is 200px wide, second takes the rest of the space */
+    grid-template-columns: 0.25fr 1fr; 
+    margin-top: 50px;
+    gap: 10px; /* Space between the columns */
+    align-items: start; /* Align content to the top of each column */
+  }
+
+  .mobile-nav {
+    flex-direction: column; /* Stack buttons vertically */
+    align-items: right; /* Align them to the right */
+    gap: 10px;
+    border: none;
+  }
+
+  #main-content-wrapper {
+    border-left: 1px solid #000000; /* The vertical dividing line */
+    padding-left: 30px; /* Space between the line and the content */
+  }
+}
+
+/* --- MOBILE LAYOUT OVERRIDES --- */
+@media (max-width: 800px) {
+  main {
+    display: block; /* Revert to a single column layout */
+  }
+
+  .mobile-nav {
+    flex-direction: row; /* Buttons are horizontal on mobile */
+    justify-content: space-around;
+    margin-bottom: 20px;
+    border: none;
+  }
+}
+
+#main-content {
+  opacity: 0;
+  transition: opacity 0.8s;
+  /* display: block will be set by default, so remove inline display:none from HTML */
 }
 
 section {
@@ -52,10 +115,45 @@ h2 {
     margin-top: 2px;
     margin-bottom: 5px;
     font-size: 1.4rem;
+    font-weight: 600;
 }
 
+ #running-clock {
+      font-family: 'Monospace', sans-serif;
+      font-size: 0.7rem;
+      text-align: right;
+      margin-top: 0px;
+      color: #787878;
+      opacity: 50%;
+    }
+
+      #mobile-running-clock {
+        display: block; /* Show the mobile clock */
+        position: absolute;
+        top: 4.5%; 
+        left: 15px; /* Adjust horizontal position as needed */
+        font-family: 'Monospace', sans-serif;
+        font-size: 14px;
+        color: #787878;
+        text-align: left;
+        opacity: 50%;
+      }
+
+      @media (max-width: 800px) {
+        #mobile-running-clock {
+          top: 4.1%;
+        }
+      }
+    
+
+
+/* replace the previous .info-title rule that pushed it over */
 .info-title{
-    margin-left: 350px;
+    margin: 0;
+    padding-top: 5%;
+    padding-left: 8px;    /* keep a small inset from the column edge */
+    text-align: right;
+    display: block;
 }
 
 .subheading {
@@ -71,7 +169,16 @@ p {
 
 #info {
     border-right: 1px solid #000000; /* first vertical line */
-    padding-right: 10px;
+    padding-right: 30px;
+    display: grid;
+    grid-template-rows: auto 1fr; /* First row for nav, second for content */
+    align-content: start;  
+}
+
+@media (min-width: 801px) {
+  #info {
+    margin-right: 15px; /* Push left, making the border visible */
+  }
 }
 
 .toggle-buttons {
@@ -139,13 +246,14 @@ p {
   margin-top: 2px;       /* space from Works section */
   border-top: 0px solid #000000;  /* optional styling */
   border-bottom: 0px solid #000000;
-  max-width: calc(100%);
+  max-width: 100%;
   box-sizing: border-box;
-  margin-left: 200px;
-  width: calc(100% - 200px);
+  margin-left: 0;
+  width: 100%;
 }
 
-#visual .image-slider img {
+#visual .image-slider img,
+#visual .image-slider video {
   flex: 0 0 auto;        /* prevent shrinking */
   height: auto;
   max-height: 50vh;
@@ -155,43 +263,44 @@ p {
   will-change: transform;
   transform-origin: center center;
   backface-visibility: hidden;
+    padding-bottom: calc(var(--slider-arrow-size) + var(--slider-arrow-bottom) + 10px);
 }
 
-#enlarged-view {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  background: transparent;
-  display: none; /* hidden by default */
-  justify-content: center;
-  align-items: center;
-  z-index: 200;
-  padding: 20px;
-  border-radius: 8px;
-}
-
-#enlarged-view img {
-  max-width: 80vw;
-  max-height: 80vh;
+/* Force all images in .image-slider to have the same height and not shrink */
+.image-slider img,
+.image-slider video {
+  flex: 0 0 auto;
+  height: clamp(140px, 28vh, 360px);
+  width: auto;
+  max-width: none !important;
   object-fit: contain;
   display: block;
-  transform: scale(0.95); /* start slightly smaller */
-  transform-origin: center center;
-  cursor: zoom-out;
-  transition: transform 0.5s ease;
-  width: auto;
-  height: auto;
 }
 
-#enlarged-view.active {
-  opacity: 1;
-  visibility: visible;
-  transform: scale(1);
+
+
+#visual .slider-arrow {
+  box-shadow: none !important;
 }
+
 
 #works {
   position: relative;
   overflow: hidden;
+  overflow-x: hidden;
 }
+
+@media (max-width: 800px) {
+  #works {
+    border-left: #000000 1px solid; /* second vertical line */
+  }
+}
+
+#contact {
+  border-bottom: #000000 1px solid; /* horizontal line above contact */
+  margin-right: 2%;
+}
+
 
 
 #visual .slider-container {
@@ -201,15 +310,21 @@ p {
 
 #visual .slider-arrow {
   position: absolute;
-  left: -180px;         /* push into the gutter */
-  top: 50%;             /* vertical center */
-  transform: translate(-50%, -50%);
-  background: none;     /* no box background */
+  bottom: calc(var(--slider-arrow-bottom) + env(safe-area-inset-bottom, 0px));
+  left: 50%;
+  width: var(--slider-arrow-size);
+  height: var(--slider-arrow-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
   border: none;
-  font-size: 2rem;      /* make arrow bigger */
+  box-shadow: none;
+  padding: 0;
+  padding-top: 7px;
   cursor: pointer;
-  color: black;         /* arrow color */
-  margin-left: 250px;
+  /* base transform centers each button on the middle line; per-side offsets applied below */
+  transform: translateX(-50%);
 }
 
 #visual .slider-arrow.arrow-left {
@@ -221,13 +336,13 @@ p {
 }
 
 #visual .slider-arrow.arrow-left img {
-    height: 35px;
-    width: 35px ;
+    height: 25px;
+    width: 25px ;
 }
 
 #visual .slider-arrow.arrow-right img {
-    height: 35px;
-    width: 35px ;
+    height: 25px;
+    width: 25px ;
 }
 
 .arrow-left img {
@@ -238,68 +353,10 @@ p {
   display: none; 
 }
 
-#binary-layer {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgb(255, 255, 255);
-  color: rgb(0, 255, 0);
-  font-family: monospace;
-  font-size: 10px;
-  line-height: 1.2;
-  padding: 10px;
-  white-space: pre;      /* wrap long lines */
-  overflow: hidden;             /* scrollable if needed */
-  z-index: 1000;                 /* below your content */
-  clip-path: circle(5px at 0 0); /* start invisible */
-  pointer-events: none;       /* allow clicks through */
-}
-
-#binary-layer.fullscreen {
-  clip-path: none;         /* reveal everything */
-  z-index: 1000;           /* above all site content */
-  pointer-events: auto;    /* optional: block clicks while active */
-  opacity: 1;
-}
-
-.red {
-  color: red;
-  font-weight: bold;
-}
-
-/* Base glow: always on */
-.red-pixel {
-  color: #ff0000;
-  text-shadow:
-    0 0 5px #ff0000,
-    0 0 10px #ff0000,
-    0 0 20px #ff0000;
-}
-
-/* Fullscreen = ADD intensity, not replace */
-.fullscreen .red-pixel {
-  text-shadow:
-    0 0 5px hsl(0, 100%, 50%),
-    0 0 15px #ff0000,
-    0 0 30px #ff0000,
-    0 0 50px #ff0000,
-    0 0 80px rgb(255, 0, 0);
-}
-
 .title {
     font-weight: 600;
     font-size: 1rem;
 }
-
-@media (max-width: 768px) {
-  #info, #works {
-    flex: 1 1 100%; /* stack vertically on mobile */
-    padding: 0.5rem;
-  }
-}
-
 /* Stretching message style */
 .stretch-message {
   font-size: 1.3rem;
@@ -321,3 +378,880 @@ p {
   text-decoration: none;
 }
 
+.work-block {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  cursor: pointer;
+}
+
+.work-header {
+  position: relative;
+  height: auto;
+  padding: 10px 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+}
+
+.work-header .title {
+  z-index: 6;
+  position: relative;
+  padding-top: 1%;
+  display: inline-block;
+  font-weight: 600;
+  text-align: right;
+  margin-right: 0;
+}
+
+.work-content .page-nav {
+  position: right;                  
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-end;     /* items inside the nav align to the right */
+  z-index: 50;                   /* above flipbook/slider but below global overlays */
+  background: transparent;       /* change if you want a visible box behind the controls */
+  pointer-events: auto;
+}
+
+/* small desktop safety: prevent inputs from being huge */
+.work-content .page-nav input[type="number"] {
+  width: 64px;
+  min-width: 56px;
+  box-sizing: border-box;
+}
+
+/* Mobile: stack and keep nav full-width so it never goes offscreen */
+@media (max-width: 800px) {
+  .work-content .page-nav {
+    position: static;            /* normal flow */
+    display: flex;
+    justify-content: flex-end;  /* keep controls visually on the right side of the stacked block */
+    padding: 8px 0;
+    margin-top: 8px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .work-content .page-nav input[type="number"] {
+    max-width: 40%;
+    min-width: 70px;
+  }
+}
+
+.hover-lines {
+  position: absolute;
+  inset: 0;
+  top: 20px;
+  overflow: hidden;
+}
+
+.hover-lines .line {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: #000;
+  transition: transform 0.6s cubic-bezier(.77,0,.175,1);
+}
+
+.hover-lines .line.top {
+  top: 50%;
+  transform: translateY(0);
+}
+
+.hover-lines .line.bottom {
+  bottom: 50%;
+  transform: translateY(0);
+}
+
+/* Hide content initially */
+.work-content {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: all 0.6s cubic-bezier(.77,0,.175,1);
+}
+
+.work-block.hover-active .hover-lines .line.top {
+  transform: translateY(-200%);
+}
+
+.work-block.hover-active .hover-lines .line.bottom {
+  transform: translateY(200%);
+}
+
+
+
+.flipbook {
+  width: 100%; /* Make it responsive to its container */
+  max-width: 600px; /* But don't let it get bigger than 600px */
+  aspect-ratio: 3 / 2; /* Maintain a 3:2 proportion */
+  height: auto; /* Let height be determined by width and aspect-ratio */
+  position: relative;
+  margin: 0 auto; /* Center the flipbook within its container */
+}
+
+.flipbook div {
+  width: 300px;   /* half the total width */
+  height: 400px;
+  overflow: hidden;
+}
+
+#flipbook-SixthSense div img {
+  padding: 1px;
+  background: rgb(210, 210, 210); /* fakes the border visually */
+  box-sizing: border-box;
+}
+
+
+/* The magic: image fills the entire page area */
+.flipbook div img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;   /* fill completely, crop edges if needed */
+  object-position: center center;
+  display: block;
+}
+
+/* Ensure flipbook pages and cover images fit proportionally */
+.flipbook, .flipbook .hard {
+  box-sizing: border-box;
+}
+
+
+.flipbook .hard img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important; /* or 'cover' if you prefer full bleed */
+  display: block !important;
+}
+
+.flipbook .turn-page {
+  box-shadow: 0 0 5px rgba(0,0,0,0.3);
+}
+
+.flipbook .shadow {
+  box-shadow: 0 0 15px rgba(255, 0, 0, 1);
+}
+
+#flipbook-A227::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  background: transparent;
+}
+
+#visual .page-nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 10px 0 20px;
+  font-family: monospace;
+}
+
+#visual .page-nav input {
+  width: 60px;
+  padding: 4px;
+  border: 1px solid #888;
+  border-radius: 4px;
+  background: #f9f9f9;
+  text-align: center;
+}
+
+#visual .page-nav button {
+  background: none;
+  border: 1px solid #444;
+  border-radius: 4px;
+  padding: 4px 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+#visual .page-nav span {
+  color: #666;
+  font-size: 0.9em;
+}
+
+
+img {
+    -webkit-user-drag: none;
+    user-drag: none;
+    pointer-events: none;
+  }
+
+
+/* Flipbook: responsive using CSS only (no JS resize handler needed) */
+.flipbook {
+  width: clamp(320px, 46vw, var(--max-flip));
+  aspect-ratio: 3 / 2;            /* keeps 3:2 proportion */
+  position: relative;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+/* turn.js expects each page element to be half the container width */
+.flipbook > div {
+  width: 50%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+/* Cover / page images: preserve aspect ratio and be centered */
+.flipbook img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;     /* scale proportionally to fit cover */
+  object-position: center;
+  display: block;
+}
+
+/* Prevent visual images from collapsing too small — keep readable height */
+.image-slider {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  overflow-x: auto;
+  padding: 12px 0;
+  box-sizing: border-box;
+}
+
+/* Allow images to scale but maintain aspect ratio and a sensible minimum height */
+.image-slider img,
+.image-slider video {
+  height: clamp(280px, 40vh, 520px);
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* Slider arrows keep position relative to container */
+.slider-container { position: relative; }
+
+/* Keep decorative hover-lines confined to header area */
+.work-header { position: relative; }
+.hover-lines {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 48px;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+/* ...existing code... */
+
+/* Ensure work opens ONLY when .hover-active is present (no :hover) */
+.work-block .work-content {
+  max-height: 0;
+  opacity: 0;
+  padding: 0 1rem;
+  transition: max-height .45s ease, opacity .35s ease, padding .35s ease;
+  overflow: hidden;
+}
+.work-block.hover-active .work-content {
+  max-height: 1200px;
+  opacity: 1;
+  padding-top: 0rem;
+  padding-bottom: 1rem;
+}
+
+/* Mobile: stack info above works, full-width */
+@media (max-width: 800px) {
+  main { grid-template-columns: 1fr; gap: 12px; padding: 12px; }
+  #info { order: 0; }
+  #works { order: 1; }
+  .buttons { justify-content: flex-start; gap: 8px; }
+}
+
+
+
+
+/* Fix: keep flipbook inside viewport, centered and non-clipping */
+#visual .image-slider {
+  margin-left: 0 !important;
+  width: 100% !important;
+  padding-left: 0;
+  padding-right: 0;
+  box-sizing: border-box;
+}
+
+.flipbook {
+  margin: 0 auto !important;
+  max-width: 100% !important;
+  width: clamp(300px, 46vw, 900px) !important;
+  aspect-ratio: 3 / 2;
+  height: auto !important;
+  left: auto !important;
+  right: auto !important;
+  overflow: visible !important;
+  box-sizing: border-box;
+}
+
+.flipbook > div {
+  width: 50% !important;
+  height: 100% !important;
+  box-sizing: border-box;
+}
+
+#works {
+  overflow-x: hidden !important; /* Hide horizontal overflow */
+  overflow-y: auto !important;   /* Allow vertical scrolling if needed */
+}
+
+/* 2. Force all direct children of 'works' to respect the container width */
+#works > .work-block,
+#works > .content-section {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* 3. Force sliders and flipbooks to be 100% wide and centered */
+.image-slider,
+.flipbook {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* 4. Ensure images inside sliders do not cause overflow */
+.image-slider img,
+.image-slider video {
+  max-width: 100% !important;
+  height: auto !important;
+  object-fit: contain !important;
+}
+
+@media (max-width: 800px) {
+  .flipbook {
+    width: 100% !important;
+    max-width: 100% !important;
+    aspect-ratio: 3 / 2 !important; /* keep 3:2 proportion on small screens */
+    height: auto !important;         /* allow height to be computed from aspect-ratio */
+    display: block !important;
+    box-sizing: border-box;
+  }
+
+  .flipbook > div {
+    width: 50% !important;   /* required by turn.js: each page is half the total width */
+    height: 100% !important; /* fill the flipbook height */
+    box-sizing: border-box;
+  }
+
+  .flipbook .page img,
+  .flipbook .hard,
+  .flipbook .hard img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    display: block !important;
+  }
+  
+
+  /* Ensure flipbook and its pages/images are visible for turn.js */
+.flipbook,
+.flipbook > div,
+.flipbook img {
+  visibility: visible
+}
+  /* Ensure parent doesn't clip the flipbook on small screens */
+  #works { overflow: visible !important; }
+}
+
+/* ...existing code... */
+
+/* Mobile: hide arrows and enable native touch horizontal scrolling */
+@media (max-width: 800px) {
+  /* hide the arrow buttons on phones */
+  #visual .slider-arrow {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  /* remove reserved left padding (space for arrows) so the images align full width */
+  #visual .image-slider {
+    padding-left: 0 !important;
+    padding-right: 6px !important;
+    box-sizing: border-box;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch; /* smooth native scrolling on iOS */
+    touch-action: pan-x;               /* allow horizontal pan gestures */
+    scroll-snap-type: x proximity;     /* optional: nicer snap feel if you later add snap points */
+  }
+
+  /* re-enable pointer events on slider images so taps still work (enlarge etc.) */
+    #visual .image-slider img,
+  #visual .image-slider video {
+    pointer-events: auto !important;
+    width: auto !important;
+    max-width: 100% !important;
+  }
+}
+
+
+/* Ensure small-screen layouts can scroll past the Works section */
+@media (max-width: 800px) {
+  /* Let document grow naturally and give main extra bottom breathing room.
+     The safe-area env() keeps space for iOS home indicator. */
+  html, body {
+    height: auto;
+  }
+
+  main {
+    /* increase bottom padding so users can scroll further past the last section */
+    padding-bottom: calc(140px + env(safe-area-inset-bottom));
+    box-sizing: border-box;
+  }
+
+  /* give some internal space inside the Works column too */
+  #works {
+    padding-bottom: 40px;
+    overflow: visible !important;
+  }
+}
+
+/* Extra fallback for very small phones */
+@media (max-width: 480px) {
+  main {
+    padding-bottom: calc(180px + env(safe-area-inset-bottom));
+  }
+}
+
+/* performance hints */
+.image-slider, .slider-container, .flipbook {
+  will-change: transform, scroll-position;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+@media (max-width: 800px) {
+  main {
+    padding-top: 40px; /* or match your header's height on mobile */
+  }
+}
+
+
+/* Ensure slider uses native scrolling and wheel handlers are passive where possible */
+#visual .image-slider { overflow-x: auto; -webkit-overflow-scrolling: touch; touch-action: pan-x; }
+
+.content-section {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1s cubic-bezier(.4,0,.2,1);
+  position: relative;
+  z-index: 1;
+  display: none;
+}
+
+.content-section.active {
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 2;
+  display: block;
+}
+
+#cursor-crosshair-x,
+#cursor-crosshair-y {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9998;
+  background: rgba(80,80,80,0.18);
+  transition: opacity 0.4s;
+  opacity: 0;
+}
+
+#cursor-crosshair-x {
+  left: 0;
+  width: 100vw;
+  height: 1.5px;
+  /* Start just below the header */
+  top: 40px;
+  transform: translateY(5px);
+}
+
+#cursor-crosshair-y {
+  /* Start at the bottom of the header */
+  top: 40px !important;
+  height: calc(100vh - 40px) !important;
+  width: 1.5px;
+  left: 0;
+  transform: translateX(-5px);
+}
+
+#cursor-coords-label {
+  position: fixed;
+  z-index: 9998;
+  pointer-events: none;
+  font-family: monospace, monospace;
+  font-size: 7px;
+  color: #444;
+  border-radius: 5px;
+  padding: 2px 7px 2px 6px;
+  opacity: 0;
+  transition: opacity 0.4s;
+  /* Place label just below the header as well */
+  transform: translate(-100%, 8px);
+  user-select: none;
+  min-width: 54px;
+  text-align: right;
+}
+
+#cursor-crosshair-x,
+#cursor-crosshair-y,
+#cursor-coords-label {
+  z-index: 999; /* below privacy overlay's 9999 */
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  z-index: 0;
+  left: 0;
+  width: 100vw;
+  /* Start grid below header */
+  top: 10px; /* match header height */
+  height: calc(100vh - 48px);
+  pointer-events: none;
+  opacity: 0.05;
+  background:
+    repeating-linear-gradient(to right, #bcbcbc 0 1px, transparent 1px 8px),
+    repeating-linear-gradient(to bottom, #bcbcbc 0 1px, transparent 1px 8px),
+    repeating-linear-gradient(to right, #888 0 1px, transparent 1px 40px),
+    repeating-linear-gradient(to bottom, #888 0 1px, transparent 1px 40px);
+  background-blend-mode: multiply;
+}
+
+.navigation {
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: rgb(153, 188, 238);
+}
+
+@media (max-width: 800px) {
+  .navigation {
+    font-size: 0.85rem !important;
+  }
+}
+
+@media (max-width: 800px) {
+  .work-content,
+  .work-content p{
+    font-size: 0.75rem !important;
+  }
+}
+
+.electric-orchestra-slider {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.electric-orchestra-slider .image-slider {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.electric-orchestra-slider .image-slider img {
+  max-width: 500px !important;
+  width: 90% !important;
+  height: auto !important;
+  margin: 0 auto !important;
+  display: block !important;
+}
+
+.slider-containerVIASILE {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.slider-containerVIASILE .image-slider img {
+  max-width: 100% !important;
+  width: 100% !important;
+  height: auto !important;
+  margin: 0 auto;
+  display: block;
+}
+
+.slider-containerCYCLES {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  overflow-x: auto;
+}
+
+.slider-containerCYCLES .image-slider {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 10px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* Sound-specific containment */
+#sound .image-slider {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: auto;
+}
+
+#sound .image-slider img,
+#sound .image-slider video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  flex: 0 0 auto;
+}
+
+/* Let the right column shrink instead of overflowing */
+#works {
+  min-width: 0;            /* critical for CSS grid in Chrome */
+  overflow-x: hidden;      /* belt-and-braces containment */
+}
+
+/* Desktop override: keep CYCLES images modest and contained */
+@media (min-width: 801px) {
+  /* Ensure the slider itself cannot overflow the grid column */
+  .slider-containerCYCLES,
+  .slider-containerCYCLES .image-slider {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    overflow-x: auto;
+    align-items: center;
+    gap: 12px;
+  }
+
+  /* Strong override for CYCLES media sizing */
+  .slider-containerCYCLES .image-slider img,
+  .slider-containerCYCLES .image-slider video {
+    /* Cap height to avoid huge items on tall viewports */
+    height: clamp(220px, 34vh, 360px) !important;
+    width: auto !important;           /* keep aspect ratio */
+    max-width: 100% !important;       /* never exceed container */
+    object-fit: contain !important;
+    display: block !important;
+    flex: 0 0 auto !important;
+  }
+}
+
+/* Also neutralize the global desktop height rule for CYCLES specifically */
+@media (min-width: 801px) {
+  .slider-containerCYCLES .image-slider img,
+  .slider-containerCYCLES .image-slider video {
+    /* override global: .image-slider img { height: clamp(280px, 40vh, 520px); } */
+    height: clamp(280px, 40vh, 520px) !important;
+  }
+}
+
+@media (min-width:801px) {
+  #works .image-slider { width: 100%; min-width: 0; box-sizing: border-box; }
+  #works .image-slider img,
+  #works .image-slider video {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    flex: 0 0 auto;
+  }
+}
+
+#volume-slider-container {
+  position: absolute;
+  top: 0.25rem;
+  right: 1rem;
+  width: 110px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  z-index: 20;
+  user-select: none;
+}
+
+
+#volume-slider-track {
+  width: 100px;
+  height: 6px;
+  background: #111;
+  border-radius: 3px;
+  position: relative;
+  margin-left: 10px;
+}
+
+#volume-slider-dot {
+  position: absolute;
+  top: 50%;
+  left: 50%; /* Start at 50% volume */
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  background: #fff;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.15s;
+  border: 2px solid #111;
+}
+
+#volume-slider-dot:active {
+  background: #eee;
+}
+
+
+@media (max-width: 650px) {
+  #privacy-box {
+    max-width: 250px !important;
+  }
+}
+
+    .mobile-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 1%;
+      margin-bottom: 2%;
+      margin-top: 2%;
+      padding-bottom: 10px;
+    }
+
+    @media (max-width: 800px) {
+  .mobile-nav{
+    align-items: flex-end;
+  }
+}
+
+    .mobile-nav-link {
+  font: inherit;
+  font-weight: 600;
+  background: transparent;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #000000;
+  padding: 5px;
+  transition: color 0.3s;
+  text-align: right;
+  border: none; /* Remove all borders */
+  outline: none; /* Remove outline */
+  -webkit-appearance: none; /* Remove iOS button styling */
+  -moz-appearance: none; /* Remove Firefox button styling */
+  appearance: none; /* Remove default button appearance */
+}
+
+.mobile-nav-link:focus {
+  outline: none;
+  border: none;
+}
+
+.mobile-nav-link:active {
+  outline: none;
+  border: none;
+}
+
+    .mobile-nav-link.active,
+    .mobile-nav-link:hover {
+      color: #111111;
+    }
+
+    .mobile-section {
+      display: none; /* Hide all sections by default */
+    }
+
+    .mobile-section.active {
+      display: block; /* Show only the active one */
+    }
+
+
+@media (max-width: 800px) {
+  .work-block .image-slider img,
+  .slider-container:not(.electric-orchestra-slider) .image-slider img,
+  .slider-containerVIASILE .image-slider img,
+  .slider-containerVIASILE,
+  .slider-containerCYCLES .image-slider img,
+  #visual .image-slider img,
+  .image-slider img, 
+  .image-slider video {
+    /* Keep the desired uniform height */
+    height: 250px !important;
+    min-height: 250px !important;
+    max-height: 250px !important;
+
+    /* Crucial Change: Allow images to be as wide as needed to meet the 300px height */
+    width: auto !important;
+    min-width: auto !important;
+    max-width: none !important; /* <--- REMOVE THE WIDTH CONSTRAINT */
+    
+    /* Keep object-fit: contain (no cropping) */
+    object-fit: contain !important;
+    
+    /* Ensure flexbox doesn't shrink them */
+    flex: 0 0 auto !important;
+    display: block !important;
+  }
+
+  .electric-orchestra-slider .image-slider {
+    justify-content: center !important;
+    width: 100% !important;
+  }
+
+  .electric-orchestra-slider .image-slider img {
+    height: 500px !important;
+    min-height: 500px !important;
+    max-height: 500px !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+  
+  /* Hide arrows on mobile */
+  .slider-arrow {
+    display: none !important;
+  }
+}
+
+
+  .desc-text
+  {
+    display: block;
+    font-size: 0.75rem !important;
+    padding-left: 2.5rem;
+  } 
+
+ @media (max-width: 800px) {
+  .mobile-flipbook-message {
+    display: block !important;
+    font-size: 14px;
+    color: #666;
+    font-style: italic;
+    margin: 2%;
+  }
+  
+  .desktop-flipbook-container {
+    display: none !important;
+  }
+}
+
+@media (min-width: 801px) {
+  .mobile-flipbook-message {
+    display: none !important;
+  }
+}

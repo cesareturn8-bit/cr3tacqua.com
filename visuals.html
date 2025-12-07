@@ -2,170 +2,288 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Visuals</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    @font-face {
-    font-family: 'PP Telegraf';
-    src: url('fonts/PPTelegraf-Regular.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-    }
+  <title>visuals</title>
+  <link rel="stylesheet" href="style.css">
 
-    body {
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      margin: 0;
-      font-family: 'PP Telegraf', sans-serif;
-      background: #fafafa;
-    }
+<style>
+  .resizable-draggable {
+    position: absolute;
+    width: 220px;
+    height: 124px;
+    min-width: 120px;
+    min-height: 68px;
+    user-select: none;
+    z-index: 1;
+  }
 
-    header {
-     width: 100%;
-     display: flex;
-     justify-content: left;
-     padding: 10px 10px;
-     font-family: 'PP Telegraf', sans-serif;
-     border-bottom: 1px solid #000000;
-    }
+  .draggable-video {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    object-fit: cover;
+  }
 
-    header h1 {
-        font-size: 0.9rem; /* Change this value as needed */
-        margin: 0;
-        font-weight: 700;
-        cursor: pointer;
-    }
-
-    #bubble-message {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 1000;
-    }
-
-    .message {
-      font-size: 1.3rem;
-      color: #222;
-      text-align: center;
-      padding: 2rem;
-      border-radius: 8px;
-      display: inline-block;
-      line-height: 1.2;
-      user-select: none;
-      white-space: pre-wrap;
-      z-index: 1000;
-    }
-    .message a {
-      color: #aeaeae;
-      text-decoration: none;
-      z-index: 1000;
-    }
-    .bubble-char {
-      display: inline-block;
-      transition: transform 0.15s cubic-bezier(.25,.8,.25,1);
-      will-change: transform;
-      z-index: 1000;
-    }
-  </style>
+  /* Handles for all edges and corners */
+  .resize-handle {
+    position: absolute;
+    z-index: 2;
+    pointer-events: auto;
+    background: transparent;
+  }
+  .resize-handle.n { top: -4px; left: 50%; transform: translateX(-50%); width: 24px; height: 8px; cursor: n-resize; }
+  .resize-handle.s { bottom: -4px; left: 50%; transform: translateX(-50%); width: 24px; height: 8px; cursor: s-resize; }
+  .resize-handle.e { right: -4px; top: 50%; transform: translateY(-50%); width: 8px; height: 24px; cursor: e-resize; }
+  .resize-handle.w { left: -4px; top: 50%; transform: translateY(-50%); width: 8px; height: 24px; cursor: w-resize; }
+  .resize-handle.nw { top: -4px; left: -4px; width: 12px; height: 12px; cursor: nw-resize; }
+  .resize-handle.ne { top: -4px; right: -4px; width: 12px; height: 12px; cursor: ne-resize; }
+  .resize-handle.sw { bottom: -4px; left: -4px; width: 12px; height: 12px; cursor: sw-resize; }
+  .resize-handle.se { bottom: -4px; right: -4px; width: 12px; height: 12px; cursor: se-resize; }
+</style>
 </head>
 <body>
 
-    <header>
+  <header>
     <h1 id="site-title">cr3tacqua.com</h1>
-    </header>
+  </header>
 
-    <div id="binary-layer"></div>
-
-    <script>
-        document.getElementById('site-title').addEventListener('click', function() {
-  window.location.href = 'index.html';
-});
-    </script>
-
-    </script>  <div class="message" id="bubble-message"></div>
   <script>
-    // The message, with the email as a link
-    const messageHTML = `Please contact <a href="mailto:cesareturn8@gmail.com">cesareturn8@gmail.com</a> for visual works.`;
-
-    // Utility to wrap each character in a span
-    function wrapChars(html) {
-      // Split HTML into text and tags
-      const parts = html.split(/(<a.*?<\/a>)/g);
-      return parts.map(part => {
-        if (part.startsWith('<a')) {
-          // For the <a> tag, wrap each char inside the tag
-          return part.replace(/>(.*?)</, (m, text) =>
-            '>' + Array.from(text).map(c =>
-              `<span class="bubble-char">${c}</span>`
-            ).join('') + '<'
-          );
-        } else {
-          // For plain text, wrap each char
-          return Array.from(part).map(c =>
-            `<span class="bubble-char">${c}</span>`
-          ).join('');
-        }
-      }).join('');
-    }
-
-    const msgDiv = document.getElementById('bubble-message');
-    msgDiv.innerHTML = wrapChars(messageHTML);
-
-    const chars = Array.from(msgDiv.querySelectorAll('.bubble-char'));
-
-    // Get the center coordinates for each char
-    function getCharCenters() {
-      return chars.map(span => {
-        const rect = span.getBoundingClientRect();
-        return {
-          x: (rect.left + rect.right) / 2,
-          y: (rect.top + rect.bottom) / 2
-        };
-      });
-    }
-
-    function updateBubble(mouseX, mouseY) {
-      const centers = getCharCenters();
-      const maxDist = 120; // px, controls bubble size
-      chars.forEach((span, i) => {
-        const dx = centers[i].x - mouseX;
-        const dy = centers[i].y - mouseY;
-        const distSq = dx * dx + dy * dy;
-        // Bubble effect: closer = more stretch, farther = less
-        let scale = 1 + 0.8 * Math.exp(-distSq / (2 * maxDist * maxDist));
-        span.style.transform = `scale(${scale},${scale})`;
-      });
-    }
-
-    // Initial bubble at center
-    setTimeout(() => {
-      const centerX = window.innerWidth / 2;
-      const centerY = window.innerHeight / 2;
-      updateBubble(centerX, centerY);
-    }, 100);
-
-    window.addEventListener('mousemove', e => {
-      updateBubble(e.clientX, e.clientY);
-    });
-
-    window.addEventListener('mouseleave', () => {
-      // Reset all to normal
-      chars.forEach(span => {
-        span.style.transition = 'transform 0.7s cubic-bezier(.25,.8,.25,1)';
-        span.style.transform = 'scale(1,1)';
-      });
-      setTimeout(() => {
-        chars.forEach(span => span.style.transition = '');
-      }, 700);
-    });
-
-    window.addEventListener('resize', () => {
-      // Recalculate on resize
-      updateBubble(window.innerWidth / 2, window.innerHeight / 2);
+    document.getElementById('site-title').addEventListener('click', function() {
+      window.location.href = 'update.html';
     });
   </script>
+  
 
+  <!-- Example resizable and draggable videos -->
+  <div class="resizable-draggable" style="top:380px;left:440px;width:300px;height:240px;">
+    <video class="draggable-video" src="videos/Muschio.mp4" autoplay loop muted></video>
+    <div class="resize-handle n"></div>
+    <div class="resize-handle s"></div>
+    <div class="resize-handle e"></div>
+    <div class="resize-handle w"></div>
+    <div class="resize-handle nw"></div>
+    <div class="resize-handle ne"></div>
+    <div class="resize-handle sw"></div>
+    <div class="resize-handle se"></div>
+  </div>
+
+  <div class="resizable-draggable" style="top:100px;left:940px;width:260px;height:280px;">
+    <video class="draggable-video" src="videos/TiedUp.mp4" autoplay loop muted></video>
+    <div class="resize-handle n"></div>
+    <div class="resize-handle s"></div>
+    <div class="resize-handle e"></div>
+    <div class="resize-handle w"></div>
+    <div class="resize-handle nw"></div>
+    <div class="resize-handle ne"></div>
+    <div class="resize-handle sw"></div>
+    <div class="resize-handle se"></div>
+  </div>
+
+  <div class="resizable-draggable" style="top:60px;left:380px;width:410px;height:310px;">
+    <video class="draggable-video" src="videos/Visual 6.mp4" autoplay loop muted></video>
+    <div class="resize-handle n"></div>
+    <div class="resize-handle s"></div>
+    <div class="resize-handle e"></div>
+    <div class="resize-handle w"></div>
+    <div class="resize-handle nw"></div>
+    <div class="resize-handle ne"></div>
+    <div class="resize-handle sw"></div>
+    <div class="resize-handle se"></div>
+  </div>
+
+  <div class="resizable-draggable" style="top:220px;left:1080px;width:350px;height:140px;">
+    <video class="draggable-video" src="videos/Entrata.mp4" autoplay loop muted></video>
+    <div class="resize-handle n"></div>
+    <div class="resize-handle s"></div>
+    <div class="resize-handle e"></div>
+    <div class="resize-handle w"></div>
+    <div class="resize-handle nw"></div>
+    <div class="resize-handle ne"></div>
+    <div class="resize-handle sw"></div>
+    <div class="resize-handle se"></div>
+  </div>
+
+  <div class="resizable-draggable" style="top:250px;left:700px;width:320px;height:130px;">
+    <video class="draggable-video" src="videos/3dcross.mp4" autoplay loop muted></video>
+    <div class="resize-handle n"></div>
+    <div class="resize-handle s"></div>
+    <div class="resize-handle e"></div>
+    <div class="resize-handle w"></div>
+    <div class="resize-handle nw"></div>
+    <div class="resize-handle ne"></div>
+    <div class="resize-handle sw"></div>
+    <div class="resize-handle se"></div>
+  </div>
+
+  <div class="resizable-draggable" style="top:400px;left:100px;width:190px;height:190px;">
+    <video class="draggable-video" src="videos/Blueprints.mp4" autoplay loop muted></video>
+    <div class="resize-handle n"></div>
+    <div class="resize-handle s"></div>
+    <div class="resize-handle e"></div>
+    <div class="resize-handle w"></div>
+    <div class="resize-handle nw"></div>
+    <div class="resize-handle ne"></div>
+    <div class="resize-handle sw"></div>
+    <div class="resize-handle se"></div>
+  </div>
+
+  <div class="resizable-draggable" style="top:620px;left:580px;width:360px;height:160px;">
+    <video class="draggable-video" src="videos/Cool.mp4" autoplay loop muted></video>
+    <div class="resize-handle n"></div>
+    <div class="resize-handle s"></div>
+    <div class="resize-handle e"></div>
+    <div class="resize-handle w"></div>
+    <div class="resize-handle nw"></div>
+    <div class="resize-handle ne"></div>
+    <div class="resize-handle sw"></div>
+    <div class="resize-handle se"></div>
+  </div>
+
+  <div class="resizable-draggable" style="top:450px;left:980px;width:350px;height: 210px;">
+    <video class="draggable-video" src="videos/LIVE VIDEO trimmed.mp4" autoplay loop muted></video>
+    <div class="resize-handle n"></div>
+    <div class="resize-handle s"></div>
+    <div class="resize-handle e"></div>
+    <div class="resize-handle w"></div>
+    <div class="resize-handle nw"></div>
+    <div class="resize-handle ne"></div>
+    <div class="resize-handle sw"></div>
+    <div class="resize-handle se"></div>
+  </div>
+
+  <div class="resizable-draggable" style="top:620px;left:120px;width:130px;height:140px;">
+    <video class="draggable-video" src="videos/MIDI CONTROL LINES_CUBEMAPS.mp4" autoplay loop muted></video>
+    <div class="resize-handle n"></div>
+    <div class="resize-handle s"></div>
+    <div class="resize-handle e"></div>
+    <div class="resize-handle w"></div>
+    <div class="resize-handle nw"></div>
+    <div class="resize-handle ne"></div>
+    <div class="resize-handle sw"></div>
+    <div class="resize-handle se"></div>
+  </div>
+
+  <div class="resizable-draggable" style="top:120px;left:80px;width:310px;height:160px;">
+    <video class="draggable-video" src="videos/PARTICLE LOGO WHITE_2.mp4" autoplay loop muted></video>
+    <div class="resize-handle n"></div>
+    <div class="resize-handle s"></div>
+    <div class="resize-handle e"></div>
+    <div class="resize-handle w"></div>
+    <div class="resize-handle nw"></div>
+    <div class="resize-handle ne"></div>
+    <div class="resize-handle sw"></div>
+    <div class="resize-handle se"></div>
+  </div>
+
+  <div class="resizable-draggable" style="top:410px;left:750px;width:350px;height:140px;">
+    <video class="draggable-video" src="videos/Screen Recording 2025-01-26 at 15.07.49.mp4" autoplay loop muted></video>
+    <div class="resize-handle n"></div>
+    <div class="resize-handle s"></div>
+    <div class="resize-handle e"></div>
+    <div class="resize-handle w"></div>
+    <div class="resize-handle nw"></div>
+    <div class="resize-handle ne"></div>
+    <div class="resize-handle sw"></div>
+    <div class="resize-handle se"></div>
+  </div>
+
+  <div class="resizable-draggable" style="top:470px;left:270px;width:280px;height:260px;">
+    <video class="draggable-video" src="videos/soft cuty bugged.mp4" autoplay loop muted></video>
+    <div class="resize-handle n"></div>
+    <div class="resize-handle s"></div>
+    <div class="resize-handle e"></div>
+    <div class="resize-handle w"></div>
+    <div class="resize-handle nw"></div>
+    <div class="resize-handle ne"></div>
+    <div class="resize-handle sw"></div>
+    <div class="resize-handle se"></div>
+  </div>
+
+  <div class="resizable-draggable" style="top:560px;left:760px;width:350px;height:190px;">
+    <video class="draggable-video" src="videos/VIDEO MAT.mp4" autoplay loop muted></video>
+    <div class="resize-handle n"></div>
+    <div class="resize-handle s"></div>
+    <div class="resize-handle e"></div>
+    <div class="resize-handle w"></div>
+    <div class="resize-handle nw"></div>
+    <div class="resize-handle ne"></div>
+    <div class="resize-handle sw"></div>
+    <div class="resize-handle se"></div>
+  </div>
+
+<script>
+    let zCounter = 10; // Start above header
+document.querySelectorAll('.resizable-draggable').forEach(container => {
+  let offsetX, offsetY, dragging = false, resizing = false, resizeDir = '', startW, startH, startX, startY, startL, startT;
+
+  // Dragging
+  container.addEventListener('mousedown', e => {
+    if (e.target.classList.contains('resize-handle')) return;
+    dragging = true;
+    offsetX = e.clientX - container.offsetLeft;
+    offsetY = e.clientY - container.offsetTop;
+    zCounter++;
+    container.style.zIndex = zCounter;
+    document.body.style.cursor = 'grabbing';
+  });
+
+  // Resizing
+  container.querySelectorAll('.resize-handle').forEach(handle => {
+    handle.addEventListener('mousedown', e => {
+      e.stopPropagation();
+      resizing = true;
+      resizeDir = [...handle.classList].find(cls =>
+        ['n','s','e','w','nw','ne','sw','se'].includes(cls)
+      );
+      startW = container.offsetWidth;
+      startH = container.offsetHeight;
+      startX = e.clientX;
+      startY = e.clientY;
+      startL = container.offsetLeft;
+      startT = container.offsetTop;
+      zCounter++;
+    container.style.zIndex = zCounter;
+      document.body.style.cursor = handle.style.cursor || window.getComputedStyle(handle).cursor;
+    });
+  });
+
+  document.addEventListener('mousemove', e => {
+    if (dragging) {
+      container.style.left = (e.clientX - offsetX) + 'px';
+      container.style.top = (e.clientY - offsetY) + 'px';
+    }
+    if (resizing) {
+      let dx = e.clientX - startX;
+      let dy = e.clientY - startY;
+      let minW = 120, minH = 68;
+      let newW = startW, newH = startH, newL = startL, newT = startT;
+
+      if (resizeDir.includes('e')) newW = Math.max(minW, startW + dx);
+      if (resizeDir.includes('s')) newH = Math.max(minH, startH + dy);
+      if (resizeDir.includes('w')) {
+        newW = Math.max(minW, startW - dx);
+        newL = startL + dx;
+      }
+      if (resizeDir.includes('n')) {
+        newH = Math.max(minH, startH - dy);
+        newT = startT + dy;
+      }
+
+      container.style.width = newW + 'px';
+      container.style.height = newH + 'px';
+      container.style.left = newL + 'px';
+      container.style.top = newT + 'px';
+    }
+  });
+
+  document.addEventListener('mouseup', () => {
+    if (dragging || resizing) {
+      dragging = false;
+      resizing = false;
+      document.body.style.cursor = '';
+    }
+  });
+});
+</script>
 </body>
 </html>

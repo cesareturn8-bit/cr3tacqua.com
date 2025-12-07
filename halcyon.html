@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>VIASILE-XI</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .background-video {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      object-fit: cover;
+      z-index: 0;
+      pointer-events: none;
+      background-color: #111;
+    }
+    .content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      width: 100vw;
+    }
+    .content video {
+      max-width: 90vw;
+      max-height: 80vh;
+      box-shadow: 0 0 32px #000a;
+      background: #111;
+    }
+    #site-title {
+      color: #000000;
+      text-align: center;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a id="site-title" href="update.html">cr3tacqua.com</a>
+  </header>
+  <video
+    class="background-video"
+    src="videos/Halcyon 2-2.mp4"
+    autoplay
+    muted
+    loop
+    playsinline
+  ></video>
+  <div class="content">
+    <video id="main-video" controls autoplay>
+      <source src="videos/Halcyon 2-2.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+  <script>
+    // Sync background video with main video
+    const main = document.getElementById('main-video');
+    const bg = document.querySelector('.background-video');
+
+    function syncBg() {
+      if (Math.abs(main.currentTime - bg.currentTime) > 0.1) {
+        bg.currentTime = main.currentTime;
+      }
+      if (main.paused && !bg.paused) bg.pause();
+      if (!main.paused && bg.paused) bg.play();
+    }
+
+    main.addEventListener('play', () => bg.play());
+    main.addEventListener('pause', () => bg.pause());
+    main.addEventListener('seeked', syncBg);
+    main.addEventListener('timeupdate', syncBg);
+    main.addEventListener('ratechange', () => { bg.playbackRate = main.playbackRate; });
+
+    // Optional: keep background muted and in sync on load
+    bg.muted = true;
+    bg.playbackRate = main.playbackRate;
+  </script>
+</body>
+</html>
