@@ -285,5 +285,14 @@ document.querySelectorAll('.resizable-draggable').forEach(container => {
   });
 });
 </script>
+
+<script>
+  // Add playsinline to all videos to prevent fullscreen on mobile
+  document.querySelectorAll('video').forEach(video => {
+    video.setAttribute('playsinline', '');
+    video.setAttribute('webkit-playsinline', ''); // For older iOS versions
+  });
+</script>
+
 </body>
 </html>
