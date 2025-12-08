@@ -940,7 +940,13 @@ function handleLandingMouseMove(e) {
   });
 }
 
-document.addEventListener('mousemove', handleLandingMouseMove);
+function isDesktop() {
+  return window.matchMedia("(min-width: 801px)").matches;
+}
+
+if (isDesktop()) {
+  document.addEventListener('mousemove', handleLandingMouseMove);
+}
 initializeLandingText();
 });
 </script>

@@ -1260,6 +1260,13 @@ body.site-entered #left-svg-container {
 }
 
 @media (max-width: 800px) {
+  #animated-text span {
+    filter: blur(1.5px) !important;
+    transition: none !important;
+  }
+}
+
+@media (max-width: 800px) {
   #left-svg-container {
     position: static;
     width: 30px;
