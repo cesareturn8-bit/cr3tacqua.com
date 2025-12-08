@@ -1204,7 +1204,7 @@ body::before {
 /* LEFT SIDE SVG CONTAINER */
 #left-svg-container {
   position: fixed;
-  bottom: 2%;
+  bottom: 5%;
   left: 10px;
   width: 22%;
   max-width: 280px;
