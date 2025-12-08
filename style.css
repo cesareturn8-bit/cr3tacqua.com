@@ -1296,3 +1296,14 @@ body.site-entered #left-svg-container {
 #svg-hover-text:hover {
   filter: none !important;
 }
+
+@media (min-width: 801px) {
+  .slider-containerCYCLES .image-slider img {
+    width: 50% !important;           /* Fill container width */
+    max-width: 100% !important;
+    height: auto !important;           /* Maintain aspect ratio */
+    object-fit: contain !important;    /* Or use 'cover' for cropping */
+    display: block !important;
+    flex: 1 1 0 !important;            /* Allow flex grow/shrink */
+  }
+}
