@@ -889,13 +889,17 @@ document.addEventListener('DOMContentLoaded', () => {
 function initializeLandingText() {
   // Start with empty text
   textElement.innerHTML = '';
+
+    // Detect if mobile (max-width: 800px)
+  const isMobile = window.matchMedia("(max-width: 800px)").matches;
+  const initialBlur = isMobile ? '1px' : '3.5px';
   
   // Create spans for each letter immediately, but invisible
   targetText.split("").forEach((letter) => {
     const span = document.createElement('span');
     span.innerText = letter;
     span.style.opacity = '0';
-    span.style.filter = 'blur(1px)';
+    span.style.filter = 'blur(3.5px)';
     span.style.transition = 'opacity 0.3s ease-in'; // Smooth fade for each letter
     textElement.appendChild(span);
   });

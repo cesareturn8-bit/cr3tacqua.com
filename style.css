@@ -1261,7 +1261,7 @@ body.site-entered #left-svg-container {
 
 @media (max-width: 800px) {
   #animated-text span {
-    filter: blur(1.5px) !important;
+    filter: blur(1px) !important;
     transition: none !important;
   }
 }
