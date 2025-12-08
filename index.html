@@ -889,10 +889,6 @@ document.addEventListener('DOMContentLoaded', () => {
 function initializeLandingText() {
   // Start with empty text
   textElement.innerHTML = '';
-
-    // Detect if mobile (max-width: 800px)
-  const isMobile = window.matchMedia("(max-width: 800px)").matches;
-  const initialBlur = isMobile ? '1px' : '3.5px';
   
   // Create spans for each letter immediately, but invisible
   targetText.split("").forEach((letter) => {
@@ -1156,7 +1152,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (playPauseBtn) playPauseBtn.style.display = 'inline-block';
 
     function updateBtn() {
-      playPauseBtn.textContent = audio && !audio.paused ? '⏸' : '▶';
+      playPauseBtn.textContent = audio && !audio.paused ? '||' : '▶';
     }
 
     playPauseBtn.addEventListener('click', function() {
