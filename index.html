@@ -160,11 +160,10 @@ body.site-entered #cursor-coords-label {
   <button class="mobile-nav-link" data-target="info">About</button>
   <button class="mobile-nav-link" data-target="works">Works</button>
   <button class="mobile-nav-link" data-target="contact">Contact</button>
+</div>
 
-  
-
+<div id="mobile-running-clock-container">
 <p id="mobile-running-clock"></p>
-
 </div>
 
     <div id="main-content-wrapper">
@@ -887,7 +886,6 @@ document.addEventListener('DOMContentLoaded', () => {
 function initializeLandingText() {
   // Start with empty text
   textElement.innerHTML = '';
-  textElement.style.filter = 'blur(1px)';
   
   // Create spans for each letter immediately, but invisible
   targetText.split("").forEach((letter) => {
@@ -927,11 +925,12 @@ function handleLandingMouseMove(e) {
     const distance = Math.abs(cursorX - spanCenterX);
     const effectRadius = 100;
     const maxBlur = 3.5;
+    const minBlur = 1;
     
     let blurAmount = maxBlur;
     if (distance < effectRadius) {
       const proximity = 1 - (distance / effectRadius);
-      blurAmount = maxBlur * (1 - proximity);
+      blurAmount = maxBlur - (maxBlur - minBlur) * proximity;
     }
     
     span.style.filter = `blur(${blurAmount}px)`;
