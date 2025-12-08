@@ -1415,9 +1415,6 @@ document.addEventListener('DOMContentLoaded', () => {
       // 1. Set the visual slider position to 50%
       setVolume(0.5);
       
-      // 2. Mute the audio so the browser allows it to play
-      audio.muted = true;
-      
       // 3. Start playback. This is now very likely to succeed.
       const playPromise = audio.play();
 
