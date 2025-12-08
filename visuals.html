@@ -360,6 +360,45 @@ document.querySelectorAll('.resizable-draggable').forEach(container => {
     }
   });
 });
+
+  let pinchResizing = false, pinchStartDist = 0, pinchStartW = 0, pinchStartH = 0;
+
+  container.querySelectorAll('.resize-handle').forEach(handle => {
+    handle.addEventListener('touchstart', e => {
+      if (e.touches.length === 2) {
+        pinchResizing = true;
+        // Get initial pinch distance
+        const [touch1, touch2] = e.touches;
+        pinchStartDist = Math.hypot(
+          touch2.clientX - touch1.clientX,
+          touch2.clientY - touch1.clientY
+        );
+        pinchStartW = container.offsetWidth;
+        pinchStartH = container.offsetHeight;
+        e.preventDefault();
+      }
+    }, { passive: false });
+  });
+
+  container.addEventListener('touchmove', e => {
+    if (pinchResizing && e.touches.length === 2) {
+      const [touch1, touch2] = e.touches;
+      const pinchDist = Math.hypot(
+        touch2.clientX - touch1.clientX,
+        touch2.clientY - touch1.clientY
+      );
+      const scale = pinchDist / pinchStartDist;
+      container.style.width = Math.max(120, pinchStartW * scale) + 'px';
+      container.style.height = Math.max(68, pinchStartH * scale) + 'px';
+      e.preventDefault();
+    }
+  }, { passive: false });
+
+  container.addEventListener('touchend', e => {
+    if (pinchResizing && e.touches.length < 2) {
+      pinchResizing = false;
+    }
+  });
 </script>
 
 <script>
