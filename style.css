@@ -966,41 +966,6 @@ body::before {
   overflow-x: hidden;      /* belt-and-braces containment */
 }
 
-/* Desktop override: keep CYCLES images modest and contained */
-@media (min-width: 801px) {
-  /* Ensure the slider itself cannot overflow the grid column */
-  .slider-containerCYCLES,
-  .slider-containerCYCLES .image-slider {
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    box-sizing: border-box !important;
-    overflow-x: auto;
-    align-items: center;
-    gap: 12px;
-  }
-
-  /* Strong override for CYCLES media sizing */
-  .slider-containerCYCLES .image-slider img,
-  .slider-containerCYCLES .image-slider video {
-    /* Cap height to avoid huge items on tall viewports */
-    height: clamp(220px, 34vh, 360px) !important;
-    width: auto !important;           /* keep aspect ratio */
-    max-width: 100% !important;       /* never exceed container */
-    object-fit: contain !important;
-    display: block !important;
-    flex: 0 0 auto !important;
-  }
-}
-
-/* Also neutralize the global desktop height rule for CYCLES specifically */
-@media (min-width: 801px) {
-  .slider-containerCYCLES .image-slider img,
-  .slider-containerCYCLES .image-slider video {
-    /* override global: .image-slider img { height: clamp(280px, 40vh, 520px); } */
-    height: clamp(280px, 40vh, 520px) !important;
-  }
-}
 
 @media (min-width:801px) {
   #works .image-slider { width: 100%; min-width: 0; box-sizing: border-box; margin-left: 0 !important; }
@@ -1299,6 +1264,17 @@ body.site-entered #left-svg-container {
 
 @media (min-width: 801px) {
   .slider-containerCYCLES .image-slider img {
+    width: 50% !important;           /* Fill container width */
+    max-width: 100% !important;
+    height: auto !important;           /* Maintain aspect ratio */
+    object-fit: contain !important;    /* Or use 'cover' for cropping */
+    display: block !important;
+    flex: 1 1 0 !important;            /* Allow flex grow/shrink */
+  }
+}
+
+@media (min-width: 801px) {
+  .slider-containerVIASILE .image-slider img {
     width: 50% !important;           /* Fill container width */
     max-width: 100% !important;
     height: auto !important;           /* Maintain aspect ratio */
