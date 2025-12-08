@@ -68,7 +68,7 @@ nav a {
   main {
     display: grid;
     /* First column is 200px wide, second takes the rest of the space */
-    grid-template-columns: 0.25fr 1fr; 
+    grid-template-columns: 0.3fr 1fr; 
     margin-top: 50px;
     gap: 10px; /* Space between the columns */
     align-items: start; /* Align content to the top of each column */
@@ -79,6 +79,7 @@ nav a {
     align-items: right; /* Align them to the right */
     gap: 10px;
     border: none;
+    z-index: 20;
   }
 
   #main-content-wrapper {
@@ -98,6 +99,7 @@ nav a {
     margin-bottom: 20px;
     border: none;
     border-right: none;
+    z-index: 20;
   }
 }
 
@@ -116,16 +118,8 @@ h2 {
     margin-bottom: 5px;
     font-size: 1.4rem;
     font-weight: 600;
+    letter-spacing: 0.2rem;
 }
-
- #running-clock {
-      font-family: 'Monospace', sans-serif;
-      font-size: 0.7rem;
-      text-align: right;
-      margin-top: 0px;
-      color: #787878;
-      opacity: 50%;
-    }
 
       #mobile-running-clock {
         display: block; /* Show the mobile clock */
@@ -133,10 +127,11 @@ h2 {
         top: 4.5%; 
         left: 15px; /* Adjust horizontal position as needed */
         font-family: 'Monospace', sans-serif;
-        font-size: 14px;
+        font-size: 0.7rem;
         color: #787878;
         text-align: left;
         opacity: 50%;
+          letter-spacing: 0.2rem;
       }
 
       @media (max-width: 800px) {
@@ -154,6 +149,7 @@ h2 {
     padding-left: 8px;    /* keep a small inset from the column edge */
     text-align: right;
     display: block;
+    letter-spacing: 0.2rem;
 }
 
 .subheading {
@@ -241,14 +237,14 @@ p {
   gap: 10px;
   overflow-x: auto;
   overflow-y: visible;
-  padding: 25px 1px;     /* space around slider */
+  padding: 25px 0;
   scroll-behavior: smooth;
-  margin-top: 2px;       /* space from Works section */
-  border-top: 0px solid #000000;  /* optional styling */
+  margin-top: 2px;
+  border-top: 0px solid #000000;
   border-bottom: 0px solid #000000;
   max-width: 100%;
   box-sizing: border-box;
-  margin-left: 0;
+  margin-left: 0 !important;
   width: 100%;
 }
 
@@ -392,6 +388,7 @@ p {
   display: flex;
   align-items: flex-start;
   justify-content: flex-end;
+  letter-spacing: 0.1rem;
 }
 
 .work-header .title {
@@ -661,6 +658,9 @@ img {
   opacity: 1;
   padding-top: 0rem;
   padding-bottom: 1rem;
+  padding-left: 0 !important; /* Prevent left shift */
+  margin-left: 0 !important;
+  margin-right: 0 !important;
 }
 
 /* Mobile: stack info above works, full-width */
@@ -952,79 +952,6 @@ body::before {
   }
 }
 
-.electric-orchestra-slider {
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-}
-
-.electric-orchestra-slider .image-slider {
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-}
-
-.electric-orchestra-slider .image-slider img {
-  max-width: 500px !important;
-  width: 90% !important;
-  height: auto !important;
-  margin: 0 auto !important;
-  display: block !important;
-}
-
-.slider-containerVIASILE {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-sizing: border-box;
-  width: 100%;
-}
-
-.slider-containerVIASILE .image-slider img {
-  max-width: 100% !important;
-  width: 100% !important;
-  height: auto !important;
-  margin: 0 auto;
-  display: block;
-}
-
-.slider-containerCYCLES {
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  overflow-x: auto;
-}
-
-.slider-containerCYCLES .image-slider {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 10px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  align-items: flex-start;
-  justify-content: flex-start;
-  width: 100%;
-  min-width: 0;
-  box-sizing: border-box;
-}
-
-/* Sound-specific containment */
-#sound .image-slider {
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-  overflow-x: auto;
-}
-
-#sound .image-slider img,
-#sound .image-slider video {
-  display: block;
-  max-width: 100%;
-  height: auto;
-  object-fit: contain;
-  flex: 0 0 auto;
-}
-
 /* Let the right column shrink instead of overflowing */
 #works {
   min-width: 0;            /* critical for CSS grid in Chrome */
@@ -1068,7 +995,7 @@ body::before {
 }
 
 @media (min-width:801px) {
-  #works .image-slider { width: 100%; min-width: 0; box-sizing: border-box; }
+  #works .image-slider { width: 100%; min-width: 0; box-sizing: border-box; margin-left: 0 !important; }
   #works .image-slider img,
   #works .image-slider video {
     max-width: 100%;
@@ -1145,6 +1072,7 @@ body::before {
   font-weight: 600;
   background: transparent;
   font-size: 1.2rem;
+  letter-spacing: 0.2rem;
   cursor: pointer;
   color: #000000;
   padding: 5px;
@@ -1256,3 +1184,100 @@ body::before {
   }
 }
 
+@media (max-width: 800px) {
+  .slider-containerVIASILE .image-slider {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center;     /* Center vertically */
+  width: 100%;
+  height: 100%;
+}
+
+.slider-containerVIASILE .image-slider img {
+  height: auto !important;
+  margin: 0 auto !important;
+  max-width: 100% !important;
+  object-fit: contain !important;
+}
+}
+
+/* LEFT SIDE SVG CONTAINER */
+#left-svg-container {
+  position: fixed;
+  bottom: 2%;
+  left: 10px;
+  width: 22%;
+  max-width: 280px;
+  height: auto;
+  z-index: 1;
+  pointer-events: auto;
+  opacity: 0;
+  transition: opacity 1.5s ease-in;
+  cursor: pointer;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+body.site-entered #left-svg-container {
+  opacity: 1;
+}
+
+/* Hover text - positioned at bottom left */
+#svg-hover-text {
+  position: fixed; /* Keep in normal flow */
+  font-size: 0.5rem;
+  font-weight: 400;
+  color: #000000;
+  text-align: left;
+  opacity: 1;
+  filter: blur(3px); /* Start blurred */
+  pointer-events: none;
+  transition: filter 0.5s ease;
+  z-index: 2;
+  letter-spacing: 0.05rem;
+  line-height: 1.2;
+  margin: 0;
+  padding: 0;
+}
+
+/* Clear the text blur when hovering the container */
+#left-svg-container:hover #svg-hover-text {
+  filter: none !important;
+}
+
+#animated-text {
+  z-index: 10001;
+  position: relative;
+  pointer-events: auto;
+}
+
+@media (max-width: 800px) {
+  #left-svg-container {
+    position: static;
+    width: 30px;
+    max-width: none;
+    padding: 0;
+    opacity: 1;
+    display: block;
+  }
+  #svg-hover-text {
+    position: absolute;
+    top: 87px;
+    left: 5px;
+    width: auto;           /* Only as wide as the text */
+    max-width: 90vw;       /* Prevent overflow */
+    z-index: 11;
+    padding: 10px;
+    display: block;
+    text-align: left;
+    pointer-events: auto;  /* Allow clicks to pass through */
+    font-size: 0.6rem;
+    line-height: 1;
+  }
+}
+
+
+
+#svg-hover-text:hover {
+  filter: none !important;
+}
