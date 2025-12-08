@@ -212,11 +212,11 @@
   </div>
 
 <script>
-    let zCounter = 10; // Start above header
+let zCounter = 10; // Start above header
 document.querySelectorAll('.resizable-draggable').forEach(container => {
   let offsetX, offsetY, dragging = false, resizing = false, resizeDir = '', startW, startH, startX, startY, startL, startT;
 
-  // Dragging
+  // --- DRAGGING ---
   container.addEventListener('mousedown', e => {
     if (e.target.classList.contains('resize-handle')) return;
     dragging = true;
@@ -227,7 +227,20 @@ document.querySelectorAll('.resizable-draggable').forEach(container => {
     document.body.style.cursor = 'grabbing';
   });
 
-  // Resizing
+  // --- TOUCH DRAGGING ---
+  container.addEventListener('touchstart', e => {
+    if (e.target.classList.contains('resize-handle')) return;
+    const touch = e.touches[0];
+    dragging = true;
+    offsetX = touch.clientX - container.offsetLeft;
+    offsetY = touch.clientY - container.offsetTop;
+    zCounter++;
+    container.style.zIndex = zCounter;
+    document.body.style.cursor = 'grabbing';
+    e.preventDefault();
+  }, { passive: false });
+
+  // --- RESIZING ---
   container.querySelectorAll('.resize-handle').forEach(handle => {
     handle.addEventListener('mousedown', e => {
       e.stopPropagation();
@@ -242,11 +255,32 @@ document.querySelectorAll('.resizable-draggable').forEach(container => {
       startL = container.offsetLeft;
       startT = container.offsetTop;
       zCounter++;
-    container.style.zIndex = zCounter;
+      container.style.zIndex = zCounter;
       document.body.style.cursor = handle.style.cursor || window.getComputedStyle(handle).cursor;
     });
+
+    // --- TOUCH RESIZING ---
+    handle.addEventListener('touchstart', e => {
+      e.stopPropagation();
+      const touch = e.touches[0];
+      resizing = true;
+      resizeDir = [...handle.classList].find(cls =>
+        ['n','s','e','w','nw','ne','sw','se'].includes(cls)
+      );
+      startW = container.offsetWidth;
+      startH = container.offsetHeight;
+      startX = touch.clientX;
+      startY = touch.clientY;
+      startL = container.offsetLeft;
+      startT = container.offsetTop;
+      zCounter++;
+      container.style.zIndex = zCounter;
+      document.body.style.cursor = handle.style.cursor || window.getComputedStyle(handle).cursor;
+      e.preventDefault();
+    }, { passive: false });
   });
 
+  // --- MOVE EVENTS ---
   document.addEventListener('mousemove', e => {
     if (dragging) {
       container.style.left = (e.clientX - offsetX) + 'px';
@@ -276,7 +310,49 @@ document.querySelectorAll('.resizable-draggable').forEach(container => {
     }
   });
 
+  // --- TOUCH MOVE EVENTS ---
+  document.addEventListener('touchmove', e => {
+    const touch = e.touches[0];
+    if (!touch) return;
+    if (dragging) {
+      container.style.left = (touch.clientX - offsetX) + 'px';
+      container.style.top = (touch.clientY - offsetY) + 'px';
+    }
+    if (resizing) {
+      let dx = touch.clientX - startX;
+      let dy = touch.clientY - startY;
+      let minW = 120, minH = 68;
+      let newW = startW, newH = startH, newL = startL, newT = startT;
+
+      if (resizeDir.includes('e')) newW = Math.max(minW, startW + dx);
+      if (resizeDir.includes('s')) newH = Math.max(minH, startH + dy);
+      if (resizeDir.includes('w')) {
+        newW = Math.max(minW, startW - dx);
+        newL = startL + dx;
+      }
+      if (resizeDir.includes('n')) {
+        newH = Math.max(minH, startH - dy);
+        newT = startT + dy;
+      }
+
+      container.style.width = newW + 'px';
+      container.style.height = newH + 'px';
+      container.style.left = newL + 'px';
+      container.style.top = newT + 'px';
+    }
+    if (dragging || resizing) e.preventDefault();
+  }, { passive: false });
+
+  // --- END EVENTS ---
   document.addEventListener('mouseup', () => {
+    if (dragging || resizing) {
+      dragging = false;
+      resizing = false;
+      document.body.style.cursor = '';
+    }
+  });
+
+  document.addEventListener('touchend', () => {
     if (dragging || resizing) {
       dragging = false;
       resizing = false;
