@@ -1,0 +1,267 @@
+
+
+text!!!!!!!!!!!!
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // --- CACHE ALL ELEMENTS ---
+  const landingContainer = document.getElementById('landing-container');
+  const textElement = document.getElementById('animated-text');
+  const consentContainer = document.getElementById('consent-container');
+  const acceptBtn = document.getElementById('accept-btn');
+  const audio = document.getElementById('bg-music');
+  const mainContent = document.getElementById('main-content');
+
+  // --- LANDING PAGE ANIMATION LOGIC ---
+  const targetText = textElement.dataset.value;
+  const chars = '...';
+  let letterSpans = [];
+
+
+function initializeLandingText() {
+  // Start with empty text
+  textElement.innerHTML = '';
+  textElement.style.filter = 'blur(2px)';
+  
+  // Create spans for each letter immediately, but invisible
+  targetText.split("").forEach((letter) => {
+    const span = document.createElement('span');
+    span.innerText = letter;
+    span.style.opacity = '0';
+    span.style.filter = 'blur(2px)';
+    span.style.transition = 'opacity 0.8s ease-in'; // Smooth fade for each letter
+    textElement.appendChild(span);
+  });
+  
+  letterSpans = Array.from(textElement.children);
+  
+  // Fade in each letter one by one
+  let delay = 0;
+  letterSpans.forEach((span, index) => {
+    setTimeout(() => {
+      span.style.opacity = '1';
+    }, delay);
+    delay += 150; // 150ms between each letter (adjust for faster/slower)
+  });
+  
+  // Show "Accept & Enter" button after all letters have faded in
+  setTimeout(() => {
+    consentContainer.classList.add('visible');
+  }, delay + 500);
+}
+
+// REVERSED HORIZONTAL TEXT BLUR EFFECT (only on landing page)
+function handleLandingMouseMove(e) {
+  if (document.body.classList.contains('site-entered')) return;
+  
+  const cursorX = e.clientX;
+  letterSpans.forEach(span => {
+    const rect = span.getBoundingClientRect();
+    const spanCenterX = rect.left + rect.width / 2;
+    const distance = Math.abs(cursorX - spanCenterX);
+    const effectRadius = 10;
+    const maxBlur = 2;
+    
+    let blurAmount = maxBlur;
+    if (distance < effectRadius) {
+      const proximity = 1 - (distance / effectRadius);
+      blurAmount = maxBlur * (1 - proximity);
+    }
+    
+    span.style.filter = `blur(${blurAmount}px)`;
+  });
+}
+
+document.addEventListener('mousemove', handleLandingMouseMove);
+initializeLandingText();
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const landingContainer = document.getElementById('landing-container');
+  const consentContainer = document.getElementById('consent-container');
+  const acceptBtn = document.getElementById('accept-btn');
+  const audio = document.getElementById('bg-music');
+  const mainContent = document.getElementById('main-content');
+
+  // Show "Accept & Enter" button after image loads
+  setTimeout(() => {
+    consentContainer.classList.add('visible');
+  }, 2500); // Adjust timing as needed
+
+  // ACCEPT & ENTER LOGIC
+  acceptBtn.addEventListener('click', () => {
+    // Store consent for autoplay
+    localStorage.setItem('audioConsentGiven', 'true');
+    
+    // Fade out consent
+    consentContainer.classList.remove('visible');
+
+    // Wait 500ms, then fade everything out
+    setTimeout(() => {
+      // Trigger the fade-out
+      document.body.classList.add('site-entered');
+
+      // Start audio
+      if (audio) {
+        audio.volume = 0.5;
+        audio.currentTime = 3;
+        audio.play().catch(e => console.warn("Audio play failed", e));
+      }
+
+      // Fade in main content
+      mainContent.style.opacity = '1';
+
+      // After landing fade completes, hide it completely
+      setTimeout(() => {
+        landingContainer.style.display = 'none';
+      }, 1000);
+    }, 500);
+  });
+});
+</script>
+
+WORKING IMAGE!|!!!!!
+
+<script>
+(function() {
+  const imageElement = document.getElementById('animated-text');
+  if (!imageElement) return;
+
+  imageElement.style.filter = 'blur(3px)';
+  imageElement.style.transition = 'filter 1s ease';
+
+  imageElement.addEventListener('mouseenter', () => {
+    imageElement.style.filter = 'blur(0.85px)';
+  });
+
+  imageElement.addEventListener('mouseleave', () => {
+    imageElement.style.filter = 'blur(3px)';
+  });
+})();
+</script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const landingContainer = document.getElementById('landing-container');
+  const consentContainer = document.getElementById('consent-container');
+  const acceptBtn = document.getElementById('accept-btn');
+  const audio = document.getElementById('bg-music');
+  const mainContent = document.getElementById('main-content');
+
+  // Show "Accept & Enter" button after image loads
+  setTimeout(() => {
+    consentContainer.classList.add('visible');
+  }, 2500); // Adjust timing as needed
+
+  // ACCEPT & ENTER LOGIC
+  acceptBtn.addEventListener('click', () => {
+    // Store consent for autoplay
+    localStorage.setItem('audioConsentGiven', 'true');
+    
+    // Fade out consent
+    consentContainer.classList.remove('visible');
+
+    // Wait 500ms, then fade everything out
+    setTimeout(() => {
+      // Trigger the fade-out
+      document.body.classList.add('site-entered');
+
+      // Start audio
+      if (audio) {
+        audio.volume = 0.5;
+        audio.currentTime = 3;
+        audio.play().catch(e => console.warn("Audio play failed", e));
+      }
+
+      // Fade in main content
+      mainContent.style.opacity = '1';
+
+      // After landing fade completes, hide it completely
+      setTimeout(() => {
+        landingContainer.style.display = 'none';
+      }, 1000);
+    }, 500);
+  });
+});
+</script>
+
+
+
+TEXT 2?
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // --- CACHE ALL ELEMENTS ---
+  const landingContainer = document.getElementById('landing-container');
+  const textElement = document.getElementById('animated-text');
+  const consentContainer = document.getElementById('consent-container');
+  const acceptBtn = document.getElementById('accept-btn');
+  const audio = document.getElementById('bg-music');
+  const mainContent = document.getElementById('main-content');
+
+  // --- LANDING PAGE ANIMATION LOGIC ---
+  const targetText = textElement.dataset.value;
+  const chars = '...';
+  let letterSpans = [];
+
+
+function initializeLandingText() {
+  // Start with empty text
+  textElement.innerHTML = '';
+  textElement.style.filter = 'blur(1px)';
+  
+  // Create spans for each letter immediately, but invisible
+  targetText.split("").forEach((letter) => {
+    const span = document.createElement('span');
+    span.innerText = letter;
+    span.style.opacity = '0';
+    span.style.filter = 'blur(1px)';
+    span.style.transition = 'opacity 0.3s ease-in'; // Smooth fade for each letter
+    textElement.appendChild(span);
+  });
+  
+  letterSpans = Array.from(textElement.children);
+  
+  // Fade in each letter one by one
+  let delay = 0;
+  letterSpans.forEach((span, index) => {
+    setTimeout(() => {
+      span.style.opacity = '1';
+    }, delay);
+    delay += 150; // 150ms between each letter (adjust for faster/slower)
+  });
+  
+  // Show "Accept & Enter" button after all letters have faded in
+  setTimeout(() => {
+    consentContainer.classList.add('visible');
+  }, delay + 3000);
+}
+
+// REVERSED HORIZONTAL TEXT BLUR EFFECT (only on landing page)
+function handleLandingMouseMove(e) {
+  if (document.body.classList.contains('site-entered')) return;
+  
+  const cursorX = e.clientX;
+  letterSpans.forEach(span => {
+    const rect = span.getBoundingClientRect();
+    const spanCenterX = rect.left + rect.width / 2;
+    const distance = Math.abs(cursorX - spanCenterX);
+    const effectRadius = 100;
+    const maxBlur = 3.5;
+    
+    let blurAmount = maxBlur;
+    if (distance < effectRadius) {
+      const proximity = 1 - (distance / effectRadius);
+      blurAmount = maxBlur * (1 - proximity);
+    }
+    
+    span.style.filter = `blur(${blurAmount}px)`;
+  });
+}
+
+document.addEventListener('mousemove', handleLandingMouseMove);
+initializeLandingText();
+});
+</script>
