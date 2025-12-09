@@ -135,9 +135,6 @@ body.site-entered #cursor-coords-label {
   <div id="landing-container">
     <div id="title-wrapper"> 
 <h1 id="animated-text" data-value="cr3t acqua"></h1>
-<div id="loading-spinner" style="display:none;">
-  <div id="spinner-circle"></div>
-</div>
       <div id="consent-container">
         <p>This website contains background audio. To enter, please allow sound playback.</p>
         <button id="accept-btn">↳ Accept & Enter</button>
@@ -1040,16 +1037,13 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 }
 
-const spinner = document.getElementById('loading-spinner');
-
 acceptBtn.addEventListener('click', () => {
   // Store consent and timestamp
   localStorage.setItem(CONSENT_KEY, 'true');
   localStorage.setItem(CONSENT_TIME_KEY, Date.now().toString());
 
-  // Fade out consent
+  // Fade1 out consent
   consentContainer.classList.remove('visible');
-  if (spinner) spinner.style.display = 'flex'; // Show spinner
 
   // Wait for images to preload before entering site
   preloadImages(() => {
@@ -1063,32 +1057,10 @@ acceptBtn.addEventListener('click', () => {
       mainContent.style.opacity = '1';
       setTimeout(() => {
         landingContainer.style.display = 'none';
-        if (spinner) spinner.style.display = 'none'; // Hide spinner
       }, 500);
-    }, 500);
+    }, 500); // You can adjust this delay if you want a fade effect
   });
 });
-});
-</script>
-
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const spinnerCircle = document.getElementById('spinner-circle');
-  if (spinnerCircle) {
-    spinnerCircle.addEventListener('mousemove', () => {
-      spinnerCircle.style.filter = 'blur(1px)';
-    });
-    spinnerCircle.addEventListener('mouseleave', () => {
-      spinnerCircle.style.filter = 'blur(3.5px)';
-    });
-    // Touch support
-    spinnerCircle.addEventListener('touchstart', () => {
-      spinnerCircle.style.filter = 'blur(1px)';
-    });
-    spinnerCircle.addEventListener('touchend', () => {
-      spinnerCircle.style.filter = 'blur(3.5px)';
-    });
-  }
 });
 </script>
 
@@ -1171,7 +1143,7 @@ if (window.matchMedia("(max-width: 800px)").matches) {
 }
 </script>
 
-<script>
+  <script>
 document.addEventListener('DOMContentLoaded', () => {
   const toggleButtons = document.querySelectorAll('.toggle-btn');
   const sections = document.querySelectorAll('.content-section');
