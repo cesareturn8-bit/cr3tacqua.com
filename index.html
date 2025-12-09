@@ -980,7 +980,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Fade in animated text
   textElement.style.opacity = '0';
-  textElement.style.transition = 'opacity 2.5s ease';
+  textElement.style.transition = 'opacity 2s ease';
   setTimeout(() => {
     textElement.style.opacity = '1';
   }, 100);
@@ -992,26 +992,30 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
       document.body.classList.add('site-entered');
       landingContainer.style.display = 'none';
-      // Fade in main content
+
+      // --- Ensure main content is hidden before fade-in ---
       mainContent.style.opacity = '0';
       mainContent.style.transition = 'opacity 1s ease';
       setTimeout(() => {
         mainContent.style.opacity = '1';
-      }, 300);
+      }, 100); // Use 100ms for immediate fade-in after landing disappears
+
       if (audio) {
         audio.volume = 0.5;
         audio.currentTime = 3;
         audio.play().catch(e => console.warn("Audio play failed", e));
       }
-    }, 100); // Wait for fade out
+    }, 2000); // Wait for fade out
   }, 2500); // Show text for 2 seconds
   return;
 }
 
   // Show "Accept & Enter" button after image loads
+if (!(lastConsent === 'true' && lastTime && (now - lastTime < TEN_MINUTES))) {
   setTimeout(() => {
     consentContainer.classList.add('visible');
   }, 2500);
+}
 
   // ACCEPT & ENTER LOGIC
   function preloadImages(callback) {
@@ -1618,7 +1622,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     // Ensure the navigation is visible initially
     if (navContainer) {
-      navContainer.style.display = 'flex';
+      navContainer.classList.add('visible');
     }
   }
 
