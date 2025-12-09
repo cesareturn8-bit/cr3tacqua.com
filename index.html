@@ -1043,11 +1043,27 @@ acceptBtn.addEventListener('click', () => {
   localStorage.setItem(CONSENT_KEY, 'true');
   localStorage.setItem(CONSENT_TIME_KEY, Date.now().toString());
 
-  // Fade1 out consent
+  // Fade out consent
   consentContainer.classList.remove('visible');
 
-  // Wait for images to preload before entering site
-  preloadImages(() => {
+  // Only wait for images to load on mobile (max-width: 800px)
+  if (window.matchMedia("(max-width: 800px)").matches) {
+    preloadImages(() => {
+      setTimeout(() => {
+        document.body.classList.add('site-entered');
+        if (audio) {
+          audio.volume = 0.5;
+          audio.currentTime = 3;
+          audio.play().catch(e => console.warn("Audio play failed", e));
+        }
+        mainContent.style.opacity = '1';
+        setTimeout(() => {
+          landingContainer.style.display = 'none';
+        }, 500);
+      }, 500);
+    });
+  } else {
+    // Desktop/tablet: enter immediately
     setTimeout(() => {
       document.body.classList.add('site-entered');
       if (audio) {
@@ -1059,8 +1075,8 @@ acceptBtn.addEventListener('click', () => {
       setTimeout(() => {
         landingContainer.style.display = 'none';
       }, 500);
-    }, 500); // You can adjust this delay if you want a fade effect
-  });
+    }, 500);
+  }
 });
 });
 </script>
