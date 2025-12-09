@@ -1130,6 +1130,13 @@ setTimeout(() => {
     return;
   }
 
+      // --- PRIORITIZE AUDIO START ---
+  if (audio) {
+    audio.volume = 0.5;
+    audio.currentTime = 3;
+    audio.play().catch(e => console.warn("Audio play failed", e));
+  }
+
   images.forEach(img => {
     function checkProgress() {
       loaded++;
@@ -1186,12 +1193,6 @@ acceptBtn.addEventListener('click', () => {
   }, 500); // Wait for background fade
 });
 
-    // --- PRIORITIZE AUDIO START ---
-  if (audio) {
-    audio.volume = 0.5;
-    audio.currentTime = 3;
-    audio.play().catch(e => console.warn("Audio play failed", e));
-  }
 });
 </script>
 
