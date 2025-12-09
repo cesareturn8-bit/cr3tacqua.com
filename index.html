@@ -985,17 +985,11 @@ function initializeLandingText() {
     }, delay);
     delay += 250; // 150ms between each letter (adjust for faster/slower)
   });
-
-  // Show spinner after all letters have faded in
-  setTimeout(() => {
-    const landingSpinner = document.getElementById('landing-spinner');
-    if (landingSpinner) landingSpinner.style.display = 'flex';
-  }, delay);
   
   // Show "Accept & Enter" button after all letters have faded in
   setTimeout(() => {
     consentContainer.classList.add('visible');
-  }, delay + 3000);
+  }, delay + 2500);
 }
 
 // REVERSED HORIZONTAL TEXT BLUR EFFECT (only on landing page)
@@ -1090,8 +1084,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function preloadImages(callback) {
   const images = Array.from(document.images);
   let loaded = 0;
-  const threshold = Math.ceil(images.length / 2); // Half of all images
-let called = false; // <-- Add this guard
+  const threshold = Math.ceil(images.length * 0.80); // 80% threshold
+  let called = false; // Guard to ensure callback is called only once
 
   if (images.length === 0) {
     callback();
@@ -1101,8 +1095,11 @@ let called = false; // <-- Add this guard
   images.forEach(img => {
     function checkProgress() {
       loaded++;
-      // Call callback once half of images are loaded
-      if (loaded === threshold) callback();
+      // Call callback once 80% of images are loaded
+      if (loaded === threshold && !called) {
+        called = true;
+        callback();
+      }
     }
     if (img.complete && img.naturalWidth !== 0) {
       checkProgress();
@@ -1130,30 +1127,14 @@ acceptBtn.addEventListener('click', () => {
     audio.play().catch(e => console.warn("Audio play failed", e));
   }
 
-  // Only wait for images to load on mobile (max-width: 800px)
-  if (window.matchMedia("(max-width: 800px)").matches) {
-    // --- SHOW SPINNER ---
-    landingSpinner.style.display = 'flex';
+  // Show spinner when loading starts (for all devices, or just mobile if you want)
+  landingSpinner.style.display = 'flex';
 
-    preloadImages(() => {
-      // --- HIDE SPINNER ---
-      landingSpinner.style.display = 'none';
+  // Start loading images (wait for 80% loaded before entering)
+  preloadImages(() => {
+    // Hide spinner when loading finishes
+    landingSpinner.style.display = 'none';
 
-      setTimeout(() => {
-        document.body.classList.add('site-entered');
-        if (audio) {
-          audio.volume = 0.5;
-          audio.currentTime = 3;
-          audio.play().catch(e => console.warn("Audio play failed", e));
-        }
-        mainContent.style.opacity = '1';
-        setTimeout(() => {
-          landingContainer.style.display = 'none';
-        }, 500);
-      }, 500);
-    });
-  } else {
-    // Desktop/tablet: enter immediately
     setTimeout(() => {
       document.body.classList.add('site-entered');
       if (audio) {
@@ -1166,7 +1147,7 @@ acceptBtn.addEventListener('click', () => {
         landingContainer.style.display = 'none';
       }, 500);
     }, 500);
-  }
+  });
 });
 });
 </script>
