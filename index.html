@@ -14,11 +14,21 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: #ffffff;
       display: flex;
       align-items: center;
       justify-content: flex-start;
       z-index: 10000;
+      transition: opacity 1s ease-out;
+    }
+
+    #landing-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      z-index: 0;
       transition: opacity 1s ease-out;
     }
 
@@ -44,8 +54,6 @@
   white-space: nowrap;
   transition: opacity 1s ease-in-out, font-size 1s ease-in-out;
 }
-
-
 
     #consent-container {
       position: absolute;
@@ -198,6 +206,7 @@ body.site-entered #cursor-coords-label {
 </div>
 
   <div id="landing-container">
+    <div id="landing-bg"></div>
     <div id="title-wrapper"> 
 <h1 id="animated-text" data-value="cr3t acqua"></h1>
       <div id="consent-container">
@@ -257,7 +266,6 @@ body.site-entered #cursor-coords-label {
       <span class="desc-text"> 
         - Product Assistant for WW Woven & Leather, MW & the whole of the Denim collections through
         SS24, FW24 and SS25 Proto, SMS and PPS as starting FW25. <br>
-        <br>
         - Live Visual Design for FW24 Office After-Show Party </span> 
       <br>
       ° Graphic & Visual Designer, Videomaker at [8r], Bassano del Grappa (Freelance) <br>
@@ -970,7 +978,11 @@ function initializeLandingText() {
     const span = document.createElement('span');
     span.innerText = letter;
     span.style.opacity = '0';
+    if (window.innerWidth <= 800) {
+    span.style.filter = 'blur(1.5px)';
+  } else {
     span.style.filter = 'blur(3.5px)';
+  }
     span.style.transition = 'opacity 0.3s ease-in'; // Smooth fade for each letter
     textElement.appendChild(span);
   });
@@ -1002,8 +1014,8 @@ function handleLandingMouseMove(e) {
     const spanCenterX = rect.left + rect.width / 2;
     const distance = Math.abs(cursorX - spanCenterX);
     const effectRadius = 100;
-    const maxBlur = 3.5;
-    const minBlur = 1;
+    const maxBlur = window.innerWidth <= 800 ? 1.85 : 3.5;
+    const minBlur = window.innerWidth <= 800 ? 0.85 : 1;
     
     let blurAmount = maxBlur;
     if (distance < effectRadius) {
@@ -1056,35 +1068,45 @@ document.addEventListener('DOMContentLoaded', () => {
   }, 100);
 
   // Fade out animated text after 2 seconds, then show main content
+setTimeout(() => {
+
+  // After background fade (wait 1s), fade out each letter randomly
   setTimeout(() => {
-    textElement.style.opacity = '0';
-    // Fade out landing and show main content
+    const spans = Array.from(textElement.children);
+    spans.forEach(span => {
+      const randomDelay = 1000 + Math.random() * 2000; // 1s to 3s
+      setTimeout(() => {
+        span.style.opacity = '0';
+      }, randomDelay);
+    });
+
+    // After max letter fade (e.g. 2s), hide landing and show main content
     setTimeout(() => {
       document.body.classList.add('site-entered');
       landingContainer.style.display = 'none';
 
-      // --- Ensure main content is hidden before fade-in ---
       mainContent.style.opacity = '0';
       mainContent.style.transition = 'opacity 1s ease';
       setTimeout(() => {
         mainContent.style.opacity = '1';
-      }, 100); // Use 100ms for immediate fade-in after landing disappears
+      }, 100);
 
       if (audio) {
         audio.volume = 0.5;
         audio.currentTime = 3;
         audio.play().catch(e => console.warn("Audio play failed", e));
       }
-    }, 2000); // Wait for fade out
-  }, 2500); // Show text for 2 seconds
+    }, 3200); // Wait for max letter fade
+  }, 0); // Wait for background fade
+}, 2500); // Show text for 2 seconds
   return;
-}
+  }
 
   // ACCEPT & ENTER LOGIC
   function preloadImages(callback) {
   const images = Array.from(document.images);
   let loaded = 0;
-  const threshold = Math.ceil(images.length * 0.80); // 80% threshold
+  const threshold = Math.ceil(images.length * 0.65); // 65% threshold
   let called = false; // Guard to ensure callback is called only once
 
   if (images.length === 0) {
@@ -1095,7 +1117,7 @@ document.addEventListener('DOMContentLoaded', () => {
   images.forEach(img => {
     function checkProgress() {
       loaded++;
-      // Call callback once 80% of images are loaded
+      // Call callback once 65% of images are loaded
       if (loaded === threshold && !called) {
         called = true;
         callback();
@@ -1120,35 +1142,40 @@ acceptBtn.addEventListener('click', () => {
   // Fade out consent
   consentContainer.classList.remove('visible');
 
+  //  After background fade (wait 1s), fade out each letter randomly
+  setTimeout(() => {
+    const spans = Array.from(textElement.children);
+    spans.forEach(span => {
+      const randomDelay = Math.random() * 2000; // 0s to 2s
+      setTimeout(() => {
+        span.style.opacity = '0';
+      }, randomDelay);
+    });
+
+    //  After max letter fade (wait 3s), show spinner and start loading
+    setTimeout(() => {
+      landingSpinner.style.display = 'flex';
+
+      preloadImages(() => {
+        landingSpinner.style.display = 'none';
+        setTimeout(() => {
+          document.body.classList.add('site-entered');
+          mainContent.style.opacity = '1';
+          setTimeout(() => {
+            landingContainer.style.display = 'none';
+          }, 500);
+        }, 500);
+      });
+    }, 3200); // Wait for max letter fade
+  }, 500); // Wait for background fade
+});
+
     // --- PRIORITIZE AUDIO START ---
   if (audio) {
     audio.volume = 0.5;
     audio.currentTime = 3;
     audio.play().catch(e => console.warn("Audio play failed", e));
   }
-
-  // Show spinner when loading starts (for all devices, or just mobile if you want)
-  landingSpinner.style.display = 'flex';
-
-  // Start loading images (wait for 80% loaded before entering)
-  preloadImages(() => {
-    // Hide spinner when loading finishes
-    landingSpinner.style.display = 'none';
-
-    setTimeout(() => {
-      document.body.classList.add('site-entered');
-      if (audio) {
-        audio.volume = 0.5;
-        audio.currentTime = 3;
-        audio.play().catch(e => console.warn("Audio play failed", e));
-      }
-      mainContent.style.opacity = '1';
-      setTimeout(() => {
-        landingContainer.style.display = 'none';
-      }, 500);
-    }, 500);
-  });
-});
 });
 </script>
 
