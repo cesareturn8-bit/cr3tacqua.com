@@ -152,8 +152,6 @@ body.site-entered #cursor-coords-label {
   </div>
   </div>
   <button id="play-pause-btn" style="display:none;">▶</button>
-</div>
-</div>
   </header>
 
   <div id="mobile-running-clock-container">
@@ -161,7 +159,7 @@ body.site-entered #cursor-coords-label {
 </div>
 
 
-  <main>
+<main>
 
 
 <div class="mobile-nav" id="mobile-nav">
@@ -187,7 +185,6 @@ body.site-entered #cursor-coords-label {
       <span class="desc-text"> 
         - Product Assistant for WW Woven & Leather, MW & the whole of the Denim collections through
         SS24, FW24 and SS25 Proto, SMS and PPS as starting FW25. <br>
-        <br>
         - Live Visual Design for FW24 Office After-Show Party </span> 
       <br>
       ° Graphic & Visual Designer, Videomaker at [8r], Bassano del Grappa (Freelance) <br>
@@ -865,7 +862,8 @@ body.site-entered #cursor-coords-label {
 
     </section>
     </div>
-  </main>
+</main>
+</div>
 
 <div id="cursor-crosshair-x"></div>
 <div id="cursor-crosshair-y"></div>
@@ -913,7 +911,7 @@ function initializeLandingText() {
     setTimeout(() => {
       span.style.opacity = '1';
     }, delay);
-    delay += 150; // 150ms between each letter (adjust for faster/slower)
+    delay += 250; // 150ms between each letter (adjust for faster/slower)
   });
   
   // Show "Accept & Enter" button after all letters have faded in
@@ -1006,15 +1004,8 @@ document.addEventListener('DOMContentLoaded', () => {
         audio.play().catch(e => console.warn("Audio play failed", e));
       }
     }, 2000); // Wait for fade out
-  }, 2500); // Show text for 2 seconds
+  }, 3500); // Show text for 2 seconds
   return;
-}
-
-  // Show "Accept & Enter" button after image loads
-if (!(lastConsent === 'true' && lastTime && (now - lastTime < TEN_MINUTES))) {
-  setTimeout(() => {
-    consentContainer.classList.add('visible');
-  }, 2500);
 }
 
   // ACCEPT & ENTER LOGIC
@@ -1157,8 +1148,7 @@ document.addEventListener('DOMContentLoaded', () => {
   navButtons.forEach(button => {
     button.addEventListener('click', () => showSection(button.dataset.target));
   });
-  
-  showSection('info'); // Show 'info' section by default
+
 });
 </script>
 
