@@ -120,11 +120,75 @@ body.site-entered #cursor-crosshair-y,
 body.site-entered #cursor-coords-label {
   opacity: 1 !important;
 }
+    .spinner-container {
+      position: fixed;
+        top: 10%;
+        left: 30%;
+        width: 100vw;
+        height: 100vh;
+        z-index: 10001;
+    }
+    .fill-spinner {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      overflow: hidden;
+      filter: blur(5px);
+      will-change: filter;
+      transition: filter 0.5s;
+      cursor: pointer;
+      top: 50%;
+      left: 50%;
+      /* Start at center, will be moved by JS */
+      transform: translate(-50%, -50%);
+    }
+    @media (max-width: 800px) {
+      .fill-spinner {
+        width: 20px;
+        height: 20px;
+      }
+    }
+    .fill-spinner:hover {
+      filter: blur(1px);
+    }
+    .fill-spinner::before {
+      content: '';
+      position: absolute;
+      left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      width: 0; height: 0;
+      background: #222;
+      border-radius: 50%;
+      animation: fillGrow 5s linear infinite;
+      z-index: 1;
+    }
+    @keyframes fillGrow {
+      0% {
+        width: 0;
+        height: 0;
+        opacity: 1;
+      }
+      70% {
+        width: 100%;
+        height: 100%;
+        opacity: 0.5;
+      }
+      80% {
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+      }
+      100% {
+        width: 0;
+        height: 0;
+        opacity: 0;
+      }
+    }
 
   </style>
 </head>
 <body>
-
   <div id="left-svg-container">
   <div id="svg-hover-text">Web design and development by © Cr3t Acqua.
     <br>
@@ -139,6 +203,10 @@ body.site-entered #cursor-coords-label {
         <p>This website contains background audio. To enter, please allow sound playback.</p>
         <button id="accept-btn">↳ Accept & Enter</button>
       </div>
+        <div class="spinner-container" id="landing-spinner" style="display:none;">
+    <div class="fill-spinner"></div>
+    <div class="fill-spinner"></div>
+    <div class="fill-spinner"></div>
     </div>
   </div>
   
@@ -915,6 +983,12 @@ function initializeLandingText() {
     }, delay);
     delay += 250; // 150ms between each letter (adjust for faster/slower)
   });
+
+  // Show spinner after all letters have faded in
+  setTimeout(() => {
+    const landingSpinner = document.getElementById('landing-spinner');
+    if (landingSpinner) landingSpinner.style.display = 'flex';
+  }, delay);
   
   // Show "Accept & Enter" button after all letters have faded in
   setTimeout(() => {
@@ -1014,26 +1088,30 @@ document.addEventListener('DOMContentLoaded', () => {
   function preloadImages(callback) {
   const images = Array.from(document.images);
   let loaded = 0;
+  const threshold = Math.ceil(images.length / 2); // Half of all images
+let called = false; // <-- Add this guard
+
   if (images.length === 0) {
     callback();
     return;
   }
+
   images.forEach(img => {
-    if (img.complete && img.naturalWidth !== 0) {
+    function checkProgress() {
       loaded++;
-      if (loaded === images.length) callback();
+      // Call callback once half of images are loaded
+      if (loaded === threshold) callback();
+    }
+    if (img.complete && img.naturalWidth !== 0) {
+      checkProgress();
     } else {
-      img.addEventListener('load', () => {
-        loaded++;
-        if (loaded === images.length) callback();
-      });
-      img.addEventListener('error', () => {
-        loaded++;
-        if (loaded === images.length) callback();
-      });
+      img.addEventListener('load', checkProgress, { once: true });
+      img.addEventListener('error', checkProgress, { once: true });
     }
   });
 }
+
+const landingSpinner = document.getElementById('landing-spinner');
 
 acceptBtn.addEventListener('click', () => {
   // Store consent and timestamp
@@ -1052,7 +1130,13 @@ acceptBtn.addEventListener('click', () => {
 
   // Only wait for images to load on mobile (max-width: 800px)
   if (window.matchMedia("(max-width: 800px)").matches) {
+    // --- SHOW SPINNER ---
+    landingSpinner.style.display = 'block';
+
     preloadImages(() => {
+      // --- HIDE SPINNER ---
+      landingSpinner.style.display = 'none';
+
       setTimeout(() => {
         document.body.classList.add('site-entered');
         if (audio) {
@@ -1438,6 +1522,66 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   })();
 </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+  const container = document.getElementById('landing-spinner');
+  const dots = container ? container.querySelectorAll('.fill-spinner') : [];
+  const params = [];
+
+  function getCentersAndRadii() {
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    // Place orbits at 1/4, 2/4, 3/4 horizontally and vertically
+    return [
+      {
+        center: { x: vw * 0.3, y: vh * 0.4 },
+        radiusX: Math.max(30, vw * 0.12),
+        radiusY: Math.max(30, vh * 0.18)
+      },
+      {
+        center: { x: vw * 0.7, y: vh * 0.6 },
+        radiusX: Math.max(30, vw * 0.10),
+        radiusY: Math.max(30, vh * 0.14)
+      },
+      {
+        center: { x: vw * 0.5, y: vh * 0.5 },
+        radiusX: Math.max(30, vw * 0.15),
+        radiusY: Math.max(30, vh * 0.22)
+      }
+    ];
+  }
+
+  function setupParams() {
+    const configs = getCentersAndRadii();
+    params.length = 0;
+    dots.forEach((dot, i) => {
+      const { center, radiusX, radiusY } = configs[i % configs.length];
+      const speed = 1.5 + Math.random() * 1.5;
+      const phase = Math.random() * Math.PI * 8;
+      params.push({ radiusX, radiusY, speed, phase, center });
+    });
+  }
+
+  setupParams();
+  window.addEventListener('resize', setupParams);
+
+  function animate() {
+    const now = performance.now() / 1000;
+    dots.forEach((dot, i) => {
+      const { radiusX, radiusY, speed, phase, center } = params[i];
+      const angle = ((now / speed) + phase) % (Math.PI * 2);
+      const x = center.x + Math.cos(angle) * radiusX;
+      const y = center.y + Math.sin(angle) * radiusY;
+      dot.style.left = `${x}px`;
+      dot.style.top = `${y}px`;
+      dot.style.transform = 'translate(-50%, -50%)';
+    });
+    requestAnimationFrame(animate);
+  }
+  animate();
+});
+  </script>
 
 <script>
 const headerBottomPx = 30; // Set this to your desired header+line height in px

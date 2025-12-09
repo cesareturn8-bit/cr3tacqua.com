@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Wave Dots Spinner</title>
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .spinner-container {
+      position: relative;
+      width: 500px;
+      height: 500px;
+      /* Center the container */
+      display: block;
+    }
+    .fill-spinner {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #fff;
+      overflow: hidden;
+      filter: blur(5px);
+      will-change: filter;
+      transition: filter 0.5s;
+      cursor: pointer;
+      top: 50%;
+      left: 50%;
+      /* Start at center, will be moved by JS */
+      transform: translate(-50%, -50%);
+    }
+    .fill-spinner:hover {
+      filter: blur(1px);
+    }
+    .fill-spinner::before {
+      content: '';
+      position: absolute;
+      left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      width: 0; height: 0;
+      background: #222;
+      border-radius: 50%;
+      animation: fillGrow 5s linear infinite;
+      z-index: 1;
+    }
+    @keyframes fillGrow {
+      0% {
+        width: 0;
+        height: 0;
+        opacity: 1;
+      }
+      70% {
+        width: 100%;
+        height: 100%;
+        opacity: 0.5;
+      }
+      80% {
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+      }
+      100% {
+        width: 0;
+        height: 0;
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="spinner-container">
+    <div class="fill-spinner"></div>
+    <div class="fill-spinner"></div>
+    <div class="fill-spinner"></div>
+  </div>
+  <script>
+    // Orbital animation for each dot with its own center
+    const container = document.querySelector('.spinner-container');
+    const dots = document.querySelectorAll('.fill-spinner');
+    const params = [];
+
+    // Define unique orbit centers for each dot
+    const centers = [
+      { x: 250, y: 150 },
+      { x: 50, y: 350 },
+      { x: 750, y: 50 }
+    ];
+
+    dots.forEach((dot, i) => {
+      // Randomize orbital parameters for each dot
+      const radiusX = 50 + Math.random() * 40; // px
+      const radiusY = 160 + Math.random() * 40; // px
+      const speed = 1.5 + Math.random() * 1.5; // seconds per orbit
+      const phase = Math.random() * Math.PI * 2; // start angle
+      const center = centers[i];
+      params.push({ radiusX, radiusY, speed, phase, center });
+    });
+
+    function animate() {
+      const now = performance.now() / 1000;
+      dots.forEach((dot, i) => {
+        const { radiusX, radiusY, speed, phase, center } = params[i];
+        // Orbital position
+        const angle = ((now / speed) + phase) % (Math.PI * 2);
+        const x = center.x + Math.cos(angle) * radiusX;
+        const y = center.y + Math.sin(angle) * radiusY;
+        dot.style.left = `${x}px`;
+        dot.style.top = `${y}px`;
+        dot.style.transform = 'translate(-50%, -50%)';
+      });
+      requestAnimationFrame(animate);
+    }
+    animate();
+  </script>
+</body>
+</html>
