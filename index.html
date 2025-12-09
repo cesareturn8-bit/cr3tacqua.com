@@ -194,6 +194,20 @@ body.site-entered #cursor-coords-label {
       }
     }
 
+    #loading-label {
+  position: fixed;
+  right: 2vw;
+  bottom: 2vw;
+  font-family: 'PP Telegraf', sans-serif;
+  font-size: 0.8rem;
+  color: #a7a7a7;
+  opacity: 0.7;
+  letter-spacing: 0.1rem;
+  z-index: 10002;
+  pointer-events: none;
+  user-select: none;
+}
+
   </style>
 </head>
 <body>
@@ -216,6 +230,7 @@ body.site-entered #cursor-coords-label {
     <div class="fill-spinner"></div>
     <div class="fill-spinner"></div>
     <div class="fill-spinner"></div>
+    <div id="loading-label">loading...</div>
     </div>
   </div>
   </div>
