@@ -1046,6 +1046,13 @@ acceptBtn.addEventListener('click', () => {
   // Fade out consent
   consentContainer.classList.remove('visible');
 
+    // --- PRIORITIZE AUDIO START ---
+  if (audio) {
+    audio.volume = 0.5;
+    audio.currentTime = 3;
+    audio.play().catch(e => console.warn("Audio play failed", e));
+  }
+
   // Only wait for images to load on mobile (max-width: 800px)
   if (window.matchMedia("(max-width: 800px)").matches) {
     preloadImages(() => {
