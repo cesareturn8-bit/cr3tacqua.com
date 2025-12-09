@@ -58,6 +58,7 @@
       opacity: 0;
       visibility: hidden;
       transition: opacity 0.5s ease, visibility 0.5s ease;
+      z-index: 10002;
     }
 
     @media (max-width: 600px) {
@@ -208,6 +209,7 @@ body.site-entered #cursor-coords-label {
     <div class="fill-spinner"></div>
     <div class="fill-spinner"></div>
     </div>
+  </div>
   </div>
   
   <div id="main-content">
@@ -1131,7 +1133,7 @@ acceptBtn.addEventListener('click', () => {
   // Only wait for images to load on mobile (max-width: 800px)
   if (window.matchMedia("(max-width: 800px)").matches) {
     // --- SHOW SPINNER ---
-    landingSpinner.style.display = 'block';
+    landingSpinner.style.display = 'flex';
 
     preloadImages(() => {
       // --- HIDE SPINNER ---
