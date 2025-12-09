@@ -114,7 +114,7 @@ nav a {
 #mobile-running-clock {
   opacity: 0;
   transition: opacity 1s ease;
-  pointer-events: none;
+  pointer-events: auto;
 }
 #main-content.visible,
 .mobile-nav.visible,

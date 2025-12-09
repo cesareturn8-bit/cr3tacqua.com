@@ -152,12 +152,13 @@ body.site-entered #cursor-coords-label {
   </div>
   </div>
   <button id="play-pause-btn" style="display:none;">▶</button>
+
+
   </header>
 
   <div id="mobile-running-clock-container">
 <p id="mobile-running-clock"></p>
 </div>
-
 
 <main>
 
@@ -167,6 +168,7 @@ body.site-entered #cursor-coords-label {
   <button class="mobile-nav-link" data-target="works">Works</button>
   <button class="mobile-nav-link" data-target="contact">Contact</button>
 </div>
+
 
     <div id="main-content-wrapper">
     <section id="info" class="mobile-section">
@@ -185,6 +187,7 @@ body.site-entered #cursor-coords-label {
       <span class="desc-text"> 
         - Product Assistant for WW Woven & Leather, MW & the whole of the Denim collections through
         SS24, FW24 and SS25 Proto, SMS and PPS as starting FW25. <br>
+        <br>
         - Live Visual Design for FW24 Office After-Show Party </span> 
       <br>
       ° Graphic & Visual Designer, Videomaker at [8r], Bassano del Grappa (Freelance) <br>
@@ -862,8 +865,7 @@ body.site-entered #cursor-coords-label {
 
     </section>
     </div>
-</main>
-</div>
+  </main>
 
 <div id="cursor-crosshair-x"></div>
 <div id="cursor-crosshair-y"></div>
@@ -1004,7 +1006,7 @@ document.addEventListener('DOMContentLoaded', () => {
         audio.play().catch(e => console.warn("Audio play failed", e));
       }
     }, 2000); // Wait for fade out
-  }, 3500); // Show text for 2 seconds
+  }, 2500); // Show text for 2 seconds
   return;
 }
 
@@ -1161,32 +1163,6 @@ if (window.matchMedia("(max-width: 800px)").matches) {
 }
 </script>
 
-  <script>
-document.addEventListener('DOMContentLoaded', () => {
-  const toggleButtons = document.querySelectorAll('.toggle-btn');
-  const sections = document.querySelectorAll('.content-section');
-
-  // Hide all sections initially
-  sections.forEach(section => section.style.display = 'none');
-
-  toggleButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      // remove previous active state
-      toggleButtons.forEach(b => b.classList.remove('active'));
-
-      // add active state to clicked button
-      btn.classList.add('active');
-
-      // show relevant content
-      const target = btn.getAttribute('data-target');
-      sections.forEach(section => {
-        section.style.display = section.id === target ? 'block' : 'none';
-      });
-    });
-  });
-});
-</script>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
@@ -1316,6 +1292,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   <script>
 document.addEventListener('DOMContentLoaded', () => {
+  const worksSection = document.getElementById('works');
   const toggleButtons = document.querySelectorAll('.toggle-btn');
   const sections = document.querySelectorAll('.content-section');
 
