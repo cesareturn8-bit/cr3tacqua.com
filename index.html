@@ -610,10 +610,10 @@ body.site-entered #cursor-coords-label {
 
         <div class="slider-container">
         <div class="image-slider">
-          <img src="images/IN MINOR KEYS FINAL.jpg" alt="PROCESS7" class="PROCESS">
+          <img src="images/IN MINOR KEYS FINAL.webp" alt="PROCESS7" class="PROCESS">
           <img src="images/MOCKUP POSTER 1.png" alt="PROCESS8" class="PROCESS">
           <img src="images/MOCKUP POSTER 2.png" alt="PROCESS9" class="PROCESS">
-          <img src="images/MOCKUP POSTER 3.png" alt="PROCESS4" class="PROCESS">
+          <img src="images/MOCKUP POSTER 3.webp" alt="PROCESS4" class="PROCESS">
           <img src="images/BOOKLET.png" alt="PROCESS2" class="PROCESS">
           <img src="images/PROCESS6.jpg" alt="PROCESS6" class="PROCESS">
           <img src="images/PROCESS5.jpg" alt="PROCESS5" class="PROCESS">
@@ -650,9 +650,9 @@ body.site-entered #cursor-coords-label {
         </p>
         <div class="slider-container">
           <div class="image-slider">
-            <img src="images/EAD LP Front Cover.png">
-            <img src="images/EAD LP Inside Cover.png">
-            <img src="images/EAP LP Back Cover.png">
+            <img src="images/EAD LP Front Cover.webp">
+            <img src="images/EAD LP Inside Cover.webp">
+            <img src="images/EAP LP Back Cover.webp">
             <img src="images/EAD.svg" alt="CD3">
             <img src="images/CDFont.jpg" alt="CD1">
             <img src="images/CDFont2.jpg" alt="CD2">
@@ -1351,30 +1351,31 @@ document.addEventListener('DOMContentLoaded', function() {
     const btn = document.getElementById(`go-page-${flipbookId}`);
     const totalSpan = document.getElementById(`page-total-${flipbookId}`);
 
-    if (input && btn && totalSpan) {
-      const totalPages = $flipbook.turn('pages');
-      totalSpan.textContent = ` / ${totalPages}`;
+    if (input && btn && totalSpan && !input.dataset.listenerAdded) {
+  input.dataset.listenerAdded = "true"; // Mark as initialized
+  const totalPages = $flipbook.turn('pages');
+  totalSpan.textContent = ` / ${totalPages}`;
 
-      btn.addEventListener('click', () => {
-        const page = parseInt(input.value);
-        if (!isNaN(page) && page >= 1 && page <= totalPages) {
-          $flipbook.turn('page', page);
-        }
-      });
-
-      input.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-          const page = parseInt(input.value);
-          if (!isNaN(page) && page >= 1 && page <= totalPages) {
-            $flipbook.turn('page', page);
-          }
-        }
-      });
-
-      $flipbook.bind('turned', function(event, page) {
-        input.value = page;
-      });
+  btn.addEventListener('click', () => {
+    const page = parseInt(input.value);
+    if (!isNaN(page) && page >= 1 && page <= totalPages) {
+      $flipbook.turn('page', page);
     }
+  });
+
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      const page = parseInt(input.value);
+      if (!isNaN(page) && page >= 1 && page <= totalPages) {
+        $flipbook.turn('page', page);
+      }
+    }
+  });
+
+  $flipbook.bind('turned', function(event, page) {
+    input.value = page;
+  });
+}
 
     // Set up keyboard navigation
     const eventName = `keydown.flip${flipbookId}`;

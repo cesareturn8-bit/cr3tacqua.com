@@ -1291,3 +1291,16 @@ body.site-entered #left-svg-container {
   }
 }
 
+@media (min-width: 801px) {
+  .image-slider img,
+  .image-slider video {
+    height: 320px !important;      /* Set a fixed height for all images */
+    min-height: 0 !important;
+    max-height: none !important;
+    width: auto !important;
+    max-width: 100% !important;
+    object-fit: contain !important;
+    display: block !important;
+    flex: 0 0 auto !important;
+  }
+}
