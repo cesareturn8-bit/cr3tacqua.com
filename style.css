@@ -1303,4 +1303,18 @@ body.site-entered #left-svg-container {
     display: block !important;
     flex: 0 0 auto !important;
   }
+
+    .electric-orchestra-slider .image-slider {
+    justify-content: center !important;
+    width: 100% !important;
+  }
+
+  .electric-orchestra-slider .image-slider img {
+    height: 750px !important;
+    min-height: 750px !important;
+    max-height: 750px !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box;
+  }
 }
