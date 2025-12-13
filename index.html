@@ -1648,7 +1648,17 @@ document.addEventListener('mousemove', function(e) {
     label.style.top = (e.clientY < headerBottomPx ? headerBottomPx : e.clientY) + 'px';
     label.textContent = `${e.clientX}px, ${e.clientY}px`;
   }
-});
+  if (e.touches && e.touches.length) {
+    const x = e.touches[0].clientX;
+    const y = e.touches[0].clientY;
+    // Move horizontal line
+    const xLine = document.getElementById('cursor-crosshair-x');
+    if (xLine) xLine.style.top = y + 'px';
+    // Move vertical line
+    const yLine = document.getElementById('cursor-crosshair-y');
+    if (yLine) yLine.style.left = x + 'px';
+  }
+}, { passive: false });
 </script>
 
 <script>
