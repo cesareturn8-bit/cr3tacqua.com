@@ -911,6 +911,21 @@ img {
   transform: translateX(-5px);
 }
 
+@media (max-width: 800px) {
+  #cursor-crosshair-x {
+    top: 50px; /* adjust for taller mobile header */
+    height: 1.5px;
+    transform: translateY(5px);
+  }
+
+  #cursor-crosshair-y {
+    top: 50px !important; /* adjust for taller mobile header */
+    height: calc(100vh - 50px) !important;
+    width: 1.5px;
+    transform: translateX(-5px);
+  }
+}
+
 #cursor-coords-label {
   position: fixed;
   z-index: 9998;
