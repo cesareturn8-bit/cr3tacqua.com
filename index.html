@@ -177,7 +177,12 @@ body.site-entered #cursor-coords-label {
       0% {
         width: 0;
         height: 0;
-        opacity: 1;
+        opacity: 0;
+      }
+      20% {
+        width: 0;
+        height: 0;
+        opacity: 0.5;
       }
       70% {
         width: 100%;
@@ -295,9 +300,9 @@ body.site-entered #cursor-coords-label {
         - Live Visual Design for FW24 Office After-Show Party </span> 
       <br>
       ° Graphic & Visual Designer, Videomaker at [8r], Bassano del Grappa (Freelance) <br>
-      2022 —— Present <br>
+      Feb 2022 —— Present <br>
       <span class="desc-text">
-      - Designing and curating the visual aesthetics of [8r] HATER, through content creation of graphics and video. Performing live visuals during the events.
+      - Designing and curating the visual aesthetics of [8r] HATER, through content creation of graphics and video and live visual performances during events.
       <br>
       </span>
       <br>
@@ -1668,6 +1673,18 @@ document.addEventListener('DOMContentLoaded', () => {
       
       // 3. Start playback. This is now very likely to succeed.
       const playPromise = audio.play();
+
+       const track = document.getElementById('volume-slider-track');
+    function playOnSliderInteraction() {
+      audio.play().catch(() => {});
+      // Remove after first interaction
+      track.removeEventListener('mousedown', playOnSliderInteraction);
+      track.removeEventListener('touchstart', playOnSliderInteraction);
+    }
+    if (track) {
+      track.addEventListener('mousedown', playOnSliderInteraction);
+      track.addEventListener('touchstart', playOnSliderInteraction);
+    }
 
       if (playPromise !== undefined) {
         playPromise.then(_ => {
