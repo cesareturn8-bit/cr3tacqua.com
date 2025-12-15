@@ -1195,15 +1195,22 @@ acceptBtn.addEventListener('click', () => {
     setTimeout(() => {
       landingSpinner.style.display = 'flex';
 
+      const minSpinnerTime = 10000; 
+      const spinnerStart = Date.now();
+
       preloadImages(() => {
-        landingSpinner.style.display = 'none';
+        const elapsed = Date.now() - spinnerStart;
+        const remaining = minSpinnerTime - elapsed;
         setTimeout(() => {
-          document.body.classList.add('site-entered');
-          mainContent.style.opacity = '1';
+          landingSpinner.style.display = 'none';
           setTimeout(() => {
-            landingContainer.style.display = 'none';
+            document.body.classList.add('site-entered');
+            mainContent.style.opacity = '1';
+            setTimeout(() => {
+              landingContainer.style.display = 'none';
+            }, 500);
           }, 500);
-        }, 500);
+        }, remaining > 0 ? remaining : 0);
       });
     }, 3200); // Wait for max letter fade
   }, 500); // Wait for background fade
