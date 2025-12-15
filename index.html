@@ -1138,7 +1138,7 @@ setTimeout(() => {
   function preloadImages(callback) {
   const images = Array.from(document.images);
   let loaded = 0;
-  const threshold = Math.ceil(images.length * 0.65); // 65% threshold
+  const threshold = Math.ceil(images.length * 0.85); // 85% threshold
   let called = false; // Guard to ensure callback is called only once
 
   if (images.length === 0) {
@@ -1156,7 +1156,7 @@ setTimeout(() => {
   images.forEach(img => {
     function checkProgress() {
       loaded++;
-      // Call callback once 65% of images are loaded
+      // Call callback once 85% of images are loaded
       if (loaded === threshold && !called) {
         called = true;
         callback();
