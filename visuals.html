@@ -258,21 +258,6 @@
     <div class="resize-handle se"></div>
   </div>
 
-  <script>
-document.querySelectorAll('.draggable-video').forEach(video => {
-  // Make sure muted and playsinline are set
-  video.muted = true;
-  video.setAttribute('playsinline', '');
-  video.setAttribute('webkit-playsinline', '');
-
-  // Try to autoplay
-  video.play().catch(() => {
-    // If blocked, play on first touch
-    document.addEventListener('touchstart', () => video.play(), { once: true });
-  });
-});
-</script>
-
 <script>
 let zCounter = 10; // Start above header
 document.querySelectorAll('.resizable-draggable').forEach(container => {
@@ -469,25 +454,6 @@ document.querySelectorAll('.resizable-draggable').forEach(container => {
     video.setAttribute('playsinline', '');
     video.setAttribute('webkit-playsinline', ''); // For older iOS versions
   });
-</script>
-
-<script>
-// Play all draggable videos on first touch (mobile-friendly)
-document.querySelectorAll('.draggable-video').forEach(video => {
-  video.muted = true; // required for mobile playback
-  video.setAttribute('playsinline', '');
-  video.setAttribute('webkit-playsinline', '');
-  video.loop = true;
-  video.load(); // ensure the video element is ready
-});
-
-// Play videos on first touch anywhere on the page
-const playAllVideos = () => {
-  document.querySelectorAll('.draggable-video').forEach(video => video.play());
-  document.removeEventListener('touchstart', playAllVideos, { passive: true });
-};
-
-document.addEventListener('touchstart', playAllVideos, { passive: true });
 </script>
 
 <script>
