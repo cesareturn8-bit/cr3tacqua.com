@@ -457,6 +457,25 @@ document.querySelectorAll('.resizable-draggable').forEach(container => {
 </script>
 
 <script>
+// Play all draggable videos on first touch (mobile-friendly)
+document.querySelectorAll('.draggable-video').forEach(video => {
+  video.muted = true; // required for mobile playback
+  video.setAttribute('playsinline', '');
+  video.setAttribute('webkit-playsinline', '');
+  video.loop = true;
+  video.load(); // ensure the video element is ready
+});
+
+// Play videos on first touch anywhere on the page
+const playAllVideos = () => {
+  document.querySelectorAll('.draggable-video').forEach(video => video.play());
+  document.removeEventListener('touchstart', playAllVideos, { passive: true });
+};
+
+document.addEventListener('touchstart', playAllVideos, { passive: true });
+</script>
+
+<script>
 document.querySelectorAll('.draggable-video').forEach(video => {
   video.addEventListener('click', () => {
     if (video.paused) {
