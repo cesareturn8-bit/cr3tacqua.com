@@ -1175,11 +1175,15 @@ body::before {
     margin: 2%;
   }
 
+  .mobile-flipbook-message {
+    text-align: center;
+  }
+
   .mobile-flipbook-message img {
     height: 250px;
     width: auto;
     object-fit: contain;
-    display: block;
+    display: inline-block;
     margin-bottom: 8px;
     pointer-events: none;
   }
