@@ -424,7 +424,7 @@ p {
 }
 
 .work-content .page-nav {
-  position: right;                  
+  position: relative;
   display: flex;
   gap: 8px;
   align-items: center;
@@ -1173,6 +1173,15 @@ body::before {
     color: #666;
     font-style: italic;
     margin: 2%;
+  }
+
+  .mobile-flipbook-message img {
+    height: 250px;
+    width: auto;
+    object-fit: contain;
+    display: block;
+    margin-bottom: 8px;
+    pointer-events: none;
   }
   
   .desktop-flipbook-container {
